@@ -96,16 +96,16 @@ RotateLeftBoolean = False
 RotateRightBoolean = False
 MissileShoot = False
 
-def MissileShot(positionXMissile, positionYMissile, AngleOfMissileTravel):
+#def MissileShot(positionXMissile, positionYMissile, AngleOfMissileTravel):
 
-        pygame.draw.circle(screen, background_colour, (positionXMissile, positionYMissile), 5)
-        positionXMissile = positionXMissile + math.cos(AngleOfMissileTravel)
-        positionYMissile = positionYMissile - math.sin(AngleOfMissileTravel)
-        pygame.draw.circle(screen, Missile_Colour, (positionXMissile, positionYMissile), 5)
+        #pygame.draw.circle(screen, background_colour, (positionXMissile, positionYMissile), 5)
+        #positionXMissile = positionXMissile + math.cos(AngleOfMissileTravel)
+        #positionYMissile = positionYMissile - math.sin(AngleOfMissileTravel)
+        #pygame.draw.circle(screen, Missile_Colour, (positionXMissile, positionYMissile), 5)
 
-positionForMissileStartX = positionXTurretLineTop - 1 - math.cos(Radians)
-positionForMissileStartY = positionYTurretLineTop - 1 - math.sin(Radians)
-AngleForMissileStart = Radians
+#positionForMissileStartX = positionXTurretLineTop - 1 - math.cos(Radians)
+#positionForMissileStartY = positionYTurretLineTop - 1 - math.sin(Radians)
+#AngleForMissileStart = Radians
 
 #entering game loop after exiting the title screen loop
 while game:
@@ -200,9 +200,9 @@ while game:
 
         pygame.draw.line(screen, BLACK, (positionXTurretLineBottom, (positionYTurretLineBottom)),(positionXTurretLineTop, positionYTurretLineTop), width=5)
 
-     if MissileShoot == True:
+     #if MissileShoot == True:
 
-         MissileShot(positionForMissileStartX, positionForMissileStartY, AngleForMissileStart)
+         #MissileShot(positionForMissileStartX, positionForMissileStartY, AngleForMissileStart)
 
      #only updates the display if changes have been made, to not overload the program and change the running speed
      if MovingRightBoolean or MovingLeftBoolean or RotateRightBoolean or RotateLeftBoolean:
