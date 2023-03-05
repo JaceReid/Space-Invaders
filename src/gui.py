@@ -1,5 +1,6 @@
-import pygame, sys
+import pygame, sys, objects, time
 from button import Button
+
 
 pygame.init()
 
@@ -38,20 +39,35 @@ def play():
 
         pygame.display.update()
 
+    image_player = pygame.image.load('resources/images/player.bmp').convert()
+    player = objects.player(image_player, x//2,y-20, 0, image_player.get_rect(center=(x//2,y-20)))
+    screen.blit(player.image, player.r)
 
 
-    player = pygame.image.load('resources/images/player.bmp').convert()
-    player_x = x//2
-    player_y = y-20
-    player_angle = 0
-    player_rect = player.get_rect(center=(player_x,player_y))
-    screen.blit(player, player_rect)
+    enemys = []
+    startx = 490
+    starty = 50
+    image_enemy = pygame.image.load('resources/images/enemy.bmp').convert()
+    ex,ey = 0,0
 
-    enemys = 0
+
+    for i in range(4):
+        ey = starty+(50*i)
+        for j in range(10):
+            ex = startx+(j*40) 
+            enemys.append(objects.enemy(image_enemy,(ex),(ey),image_enemy.get_rect(center=(ex,ey))))
+
+
 
     while True:
         screen.blit(BG, (0,0))
-        move_right, move_left = False,False
+        
+        for i in range(40):
+            if(enemys[i].x < x):
+                time.sleep(.002)
+                enemys[i].move(0)
+            screen.blit(enemys[i].image, enemys[i].r)
+            
 
 
         pygame.key.set_repeat(1,10)
@@ -65,28 +81,27 @@ def play():
                     main_menu()
 
                 if event.key == pygame.K_d:
-                    if(player_x < x):
-                        player_x += 3
-                        player_rect = player.get_rect(center=(player_x,player_y))
+                    if(player.x < x):
+                        player.move(0)
 
                 if event.key == pygame.K_a:
-                    if(player_x > 0):
-                        player_x -= 3
-                        player_rect = player.get_rect(center=(player_x,player_y))
+                    if(player.x > 0):
+                        player.move(1)
 
                 if event.key == pygame.K_e:
-                    if player_angle > -90:
-                        player_angle -= 1.5
+                    if player.a > -45:
+                        player.a -= 1.5
 
                 if event.key == pygame.K_q:
-                    if player_angle < 90:
-                        player_angle += 1.5
+                    if player.a < 45:
+                        player.a += 1.5
 
                 if event.key == pygame.K_SPACE:
+                    pass
 
 
         
-        screen.blit(pygame.transform.rotate(player, player_angle), player_rect)
+        screen.blit(pygame.transform.rotate(player.image, player.a), player.r)
         pygame.display.update()
     
 def options():
