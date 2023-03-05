@@ -1,18 +1,21 @@
 import pygame
-import ctypes
+import pygame_widgets as pw
 import time
 import math
+import tkinter
+
+root = tkinter.Tk()
+root.withdraw()
+
+X, Y = root.winfo_screenwidth(), root.winfo_screenheight()
+
 
 pygame.init()
 
-#giving the width and height of my python window the values of my computer screen dimensions to enable full screen
-myCTypesUser = ctypes.windll.user32
-Y = myCTypesUser.GetSystemMetrics(1)
-X = myCTypesUser.GetSystemMetrics(0)
 
 #defining fonts
-fontA = pygame.font.Font('LCDN.TTF', 50)
-fontB = pygame.font.Font('HARLOWSI.TTF', 70)
+fontA = pygame.font.Font('resources/fonts/LCDN.TTF', 50)
+fontB = pygame.font.Font('resources/fonts/HARLOWSI.TTF', 70)
 
 #defining colours
 RED = (255, 0, 0)
@@ -31,6 +34,8 @@ def TextRenderFunction(WordsWanted, ColourOfText, centeringCoords, font):
     textRect = text1.get_rect()
     textRect.center = centeringCoords
     screen.blit(text1, textRect)
+
+
 
 TextRenderFunction('Cosmic Battle', (255, 255, 255), (X // 2, Y // 5), fontB)
 TextRenderFunction('Instructions:', GREEN, (X//2, Y//3 -10), fontA)
@@ -52,6 +57,7 @@ while titlescreen:
     for event in pygame.event.get():
 
         if event.type == pygame.KEYDOWN:
+            
 
             #key to press to exit the game
             if event.key == pygame.K_x:

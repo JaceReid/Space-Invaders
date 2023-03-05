@@ -1,0 +1,9 @@
+{
+  "MoveLeft": "A",
+  "MoveRight": "D",
+  "RotateLeft": "Q",
+  "RotateRight": "E",
+  "Exit": "X",
+  "Sound": 1,
+  "Volume": 50
+}
