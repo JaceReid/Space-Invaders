@@ -40,13 +40,21 @@ def play():
 
 
 
+    player = pygame.image.load('resources/images/player.bmp').convert()
+    player_x = x//2
+    player_y = y-20
+    player_angle = 0
+    player_rect = player.get_rect(center=(player_x,player_y))
+    screen.blit(player, player_rect)
+
+    enemys = 0
+
     while True:
-        mouse_pos = pygame.mouse.get_pos()
-
         screen.blit(BG, (0,0))
+        move_right, move_left = False,False
 
-        #draw objects
-        pygame.draw.circle(screen, "Red", (x//2,y-20), 30)
+
+        pygame.key.set_repeat(1,10)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -56,6 +64,29 @@ def play():
                 if event.key == pygame.K_x:
                     main_menu()
 
+                if event.key == pygame.K_d:
+                    if(player_x < x):
+                        player_x += 3
+                        player_rect = player.get_rect(center=(player_x,player_y))
+
+                if event.key == pygame.K_a:
+                    if(player_x > 0):
+                        player_x -= 3
+                        player_rect = player.get_rect(center=(player_x,player_y))
+
+                if event.key == pygame.K_e:
+                    if player_angle > -90:
+                        player_angle -= 1.5
+
+                if event.key == pygame.K_q:
+                    if player_angle < 90:
+                        player_angle += 1.5
+
+                if event.key == pygame.K_SPACE:
+
+
+        
+        screen.blit(pygame.transform.rotate(player, player_angle), player_rect)
         pygame.display.update()
     
 def options():
@@ -87,8 +118,8 @@ def main_menu():
 
         mouse_pos = pygame.mouse.get_pos()
 
-        MENU_TEXT = get_font(100).render("Space Invaders", True, "#b68f40")
-        MENU_RECT = MENU_TEXT.get_rect(center=(640, 100))
+        menu_text = get_font(100).render("Space Invaders", True, "#b68f40")
+        menu_rect = menu_text.get_rect(center=(640, 100))
 
         PLAY_BUTTON = Button(image=None, pos=(640, 300), 
                             text_input="PLAY", font=get_font(75), base_color="#d7fcd4", hovering_color="Green")
@@ -97,7 +128,7 @@ def main_menu():
         QUIT_BUTTON = Button(image=None, pos=(640, 500), 
                             text_input="QUIT", font=get_font(75), base_color="#d7fcd4", hovering_color="Green")
 
-        screen.blit(MENU_TEXT, MENU_RECT)
+        screen.blit(menu_text, menu_rect)
 
         for button in [PLAY_BUTTON, OPTIONS_BUTTON, QUIT_BUTTON]:
             button.changeColor(mouse_pos)
