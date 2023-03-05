@@ -58,16 +58,16 @@ def play():
             enemys.append(objects.enemy(image_enemy,(ex),(ey),image_enemy.get_rect(center=(ex,ey))))
 
 
-
+    count = 0
     while True:
         screen.blit(BG, (0,0))
-        
         for i in range(40):
-            if(enemys[i].x < x):
-                time.sleep(.002)
-                enemys[i].move(0)
+            if (count % 10) == 0:
+                if(enemys[i].x < x):
+                    enemys[i].move(0)
             screen.blit(enemys[i].image, enemys[i].r)
-            
+
+        count += 1
 
 
         pygame.key.set_repeat(1,10)
