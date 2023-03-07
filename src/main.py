@@ -2,7 +2,6 @@ import gui
 import objects
 
 def main():
-    player = objects.player
     gui.run()
 
     
