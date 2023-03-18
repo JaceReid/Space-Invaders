@@ -1,5 +1,4 @@
-import math
-import pygame
+import math, pygame, random
 
 class player:
     def __init__(self, image, x, y, a, r):
@@ -10,7 +9,7 @@ class player:
         self.r = r
 
     def move(self, direction):
-        move(self, direction, 3)
+        move(self, direction, 1)
 
     def rotate(self, direction):
         if direction == 0:
@@ -30,11 +29,18 @@ class rocket:
         self.a = a
         self.r = r
 
-    def move(self):
-        a1 = (math.pi/2) - self.a*(math.pi/180) 
+    def move(self, e):
+        if not e:
+            a1 = (math.pi/2) - self.a*(math.pi/180) 
 
-        self.x -= 8*math.cos(a1)
-        self.y -= abs(8*math.sin(a1))
+            self.x -= 14*math.cos(a1)
+            self.y -= 14*math.sin(a1)
+        else:
+            a1 = (math.pi/2) - self.a*(math.pi/180) 
+
+            self.x -= 14*math.cos(a1)
+            self.y += 14*math.sin(a1)
+    
 
 class enemy:
     def __init__(self, image, x, y, speed,r):
@@ -47,7 +53,17 @@ class enemy:
     def move(self, direction):
         move(self, direction, self.speed)
 
+class bunker:
+    def __init__(self, image, x,y,r,s):
+        self.image = image
+        self.x = x
+        self.y = y
+        self.r = r
+        self.s = s
 
+    def damage(self):
+        if random.randint(0,3 > 1):
+            self.s -= 1
 
 def move(self, direction, amount):
     if direction == 0:
