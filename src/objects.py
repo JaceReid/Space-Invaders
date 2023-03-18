@@ -53,6 +53,9 @@ class enemy:
     def move(self, direction):
         move(self, direction, self.speed)
 
+    def __str__(self):
+        return str(self.x) + " " + str(self.y) + ";  " + str(self.r)
+
 class bunker:
     def __init__(self, image, x,y,r,s):
         self.image = image
