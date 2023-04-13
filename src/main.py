@@ -1,27 +1,47 @@
+# Importing modules
 import gui, class_Manager, physics
-import time, random, math
+import time, random, math, json, datetime
+
+# Declaring global varibles
+wave = 0
+score = 0
+
 
 def main():
 
+    # Get the users option from the main menu
+    option = ""
     option = gui.main_menu()
 
-    # check the button pressed on the main Menu
 
+    # Change window depending on the button pressed.
     if option == 'play':
         play()
+        start_time = datetime.datetime.now()
     elif option == 'options':
-        gui.options()
+        show_scores()
 
     
 
 def play():
 
-    gui.play()
+    # set global varible
+    global wave
+    global score
+    global start_time
+
+    # Check if it is the first wave
+    if wave == 0:
+        gui.play(1)
+    else:
+        gui.play(0)
 
     
     area = gui.get_area()
 
-    BG = gui.load_image("resources/images/game.png",None)
+    # Declare and intilze varibles
+    BG = gui.load_image("resources/images/game.jpg",None)
+    BG = gui.scale_image(BG,area[0],area[1])
     game_bg = gui.load_image("resources/images/bg.png", None)
     image_player = gui.load_image('resources/images/player.bmp',BG)
     image_rocket = gui.load_image('resources/images/rocket.bmp',BG)
@@ -44,7 +64,7 @@ def play():
     heart = gui.scale_image(gui.load_image('resources/images/heart.png',BG),28,28)
     
 
-    r,c = 4,10
+    r,c = 4,(10+2*wave)
     player_lives = 3
     shooting = False
     rockets = []
@@ -62,26 +82,35 @@ def play():
 
     player = class_Manager.make_player(image_player, area[0]//2,area[1]-20)
 
+    # Set the postions for all the enemys
     for i in range(r):
         ey = starty+(50*i)
         for j in range(c):
             ex = startx+(j*50) 
             
-            enemys.append(class_Manager.make_enemy(image_enemy,ex,ey))
+            enemys.append(class_Manager.make_enemy(image_enemy,ex,ey,2+1*wave))
 
-    score = time.clock_gettime(time.CLOCK_MONOTONIC_RAW)
 
     gui.clear_screen(game_bg)
 
+    # Game loop
     while True:
 
         gui.clear_screen(BG)
 
+        # If all enemys are dead
         if (len(enemys) == 0):
 
-            score = int((time.clock_gettime(time.CLOCK_MONOTONIC_RAW)-score)*100)
-            gui.game_state('YOU WIN!!  score: ' + str(score))
+            if wave == 5:
+                gui.game_state('YOU WIN!!  score: ' + str(int(score)),0)
+                name = gui.get_name()
+                save_score("James", score)
+            else:
+                wave += 1
+                play()
 
+        # count is used as a game tick
+        # genrate a bunker in one of the 4 postions with a random probabilty
         if count % 100 == 0:
 
             if (random.randint(0,2) > 1):
@@ -112,25 +141,30 @@ def play():
 
             gui.draw_object(bunkers[i].image, bunkers[i].r)
 
+        # Check if player or enemy rockets hit the bunkers and then have a rondom chance of doing damage
             for j in range(len(rockets)):
-                if physics.colision(rockets[j],bunkers[i]):
+                if physics.colision(rockets[j],bunkers[i],30):
                     del rockets[j]
                     bunkers[i].damage()
 
             for j in range(len(enemy_rockets)):
 
-                if physics.colision(enemy_rockets[j],bunkers[i]):
+                if physics.colision(enemy_rockets[j],bunkers[i],40):
                     del enemy_rockets[j]
                     bunkers[i].damage()
                     break
 
-                if physics.colision(enemy_rockets[j],player):
+                if physics.colision(enemy_rockets[j],player,20):
                     hit = True
                     break
 
-        if hit and tick-last_hit > 3:
+        # Check the players number of lives if they are hit
+        if hit and (tick-last_hit) > 3:
             if player_lives == 1:
-                op = gui.game_state("GAME OVER")
+                save_score("James", score)
+                op = gui.game_state("GAME OVER\nSCORE: " + str(score*(wave+1)),1)
+                #gui.get_name()
+                wave = 0 
                 if op == 1:
                     play()
             player_lives -= 1
@@ -139,6 +173,7 @@ def play():
 
 
 
+        # looping through all the enemys to check when to change direction
         for i in range(len(enemys)):
             try:
                 if (count % 10) == 0:
@@ -154,10 +189,11 @@ def play():
                             direction = 1
                         
 
-                            for h in range(40): 
-                                enemys[h].speed += 2
+                            for h in range(r*c): 
+                                if enemys[h].speed < 14:
+                                    enemys[h].speed += 2
                                 enemys[h].y += 25
-                                enemys[h].x = area[0]-10 - 50*(h%9)
+                                enemys[h].x = area[0]-10 - 50*(h%(c-1))
 
                             
 
@@ -167,10 +203,11 @@ def play():
 
                         if(enemys[i].x <= 10):
                             direction = 0
-                            for h in range(40): 
-                                enemys[h].speed += 2
+                            for h in range(r*c): 
+                                if enemys[h].speed < 14:
+                                    enemys[h].speed += 2
                                 enemys[h].y += 25
-                                enemys[h].x = 10 + 50*(h%9)
+                                enemys[h].x = 10 + 50*(h%(c-1))
 
 
                         enemys[i].move(direction) 
@@ -181,7 +218,9 @@ def play():
                 
 
                 if(enemys[i].y >= area[1]):
-                    op = gui.game_state('GAME OVER')
+                    op = gui.game_state('GAME OVER\nSCORE: ' + str(score),1)
+                    gui.get_name()
+                    wave = 0
                     if op == 1:
                         play()
             except:
@@ -190,15 +229,17 @@ def play():
 
                 
 
-            for h in range(len(rockets)-1):
-                if(abs(rockets[h].x - enemys[i].x) < 20 and abs(rockets[h].y - enemys[i].y) < 20):
+            for h in range(len(rockets)):
+                if physics.colision(rockets[h], enemys[i],30):
                     del rockets[h]
                     del enemys[i]
+                    score += 10*(wave+1)
                     break
 
 
     
 
+        # Move the rockets from the player
         if shooting:
             for i in range(len(rockets)):
                 if(count % 5 == 0):
@@ -208,6 +249,7 @@ def play():
                 gui.draw_object(gui.rotate_image(rockets[i].image, rockets[i].a), rockets[i].r)
 
 
+        # Move the enemy rockets
         for i in range(len(enemy_rockets)):
             if(count % 10 == 0):
                 enemy_rockets[i].move(True)
@@ -215,11 +257,16 @@ def play():
             gui.draw_object(enemy_rockets[i].image, enemy_rockets[i].r)
 
 
+        # draw the player lives
         for i in range(player_lives):
             gui.draw_object(heart, gui.get_image_rect(heart,30+i*20,area[1]-30))
 
+        # display score
+        gui.render_lines("score: " + str(score),area[0]//2,25,30)
 
 
+
+        # check user key presses and do actions acroudingly
         keys = gui.get_keys()
 
         if keys == 'Dx':
@@ -275,14 +322,68 @@ def play():
             if player.a < 45:
                 player.a += 0.5
 
+        
+        if tick < 10:
+            gui.render_lines("wave " + str(wave + 1),area[0]//2,area[1]//2,40)
 
 
+
+        # get count
         if(count%40 == 0):
             tick = count // 40
         count += 1
 
         gui.draw_object(gui.rotate_image(player.image, player.a), player.r)
         gui.update()
+
+# Displays the highscores in the right formate
+def show_scores():
+
+    data = get_scores()
+
+    scores = "\n"
+    count = 0
+
+    for w in sorted(data, key=data.get, reverse=True):
+        if count < 8:
+            name = w[0:w.find("~")]
+            date = w[w.find("~")+1:w.find(" ")]
+            score = data[w]
+
+            scores += date + "  " + name + ": " + str(score) + "\n"
+        count += 1
+
+    gui.highscore(scores)
+
+# save a new high score to the json file
+def save_score(name, score):
+
+
+    date = str(datetime.datetime.now())
+    name = name + "~" + date
+
+    data = get_scores()
+    
+    values = []
+
+    
+
+
+   # data[name] = score
+
+    data.update({name: score})
+
+
+    with open('data/highscore.json', 'w') as f:
+        json.dump(data, f)
+
+# Gets the saved highscores from a json file
+def get_scores():
+
+    with open('data/highscore.json') as f:
+        data = json.load(f)
+
+    return data
 
 
 if __name__ == '__main__': main()

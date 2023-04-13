@@ -1,5 +1,6 @@
 import math, pygame, random
 
+# Player class
 class player:
     def __init__(self, image, x, y, a, r):
         self.image = image

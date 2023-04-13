@@ -1,8 +1,8 @@
 import math
 
-def colision(a,b):
+def colision(a,b,d):
     x = False
-    if(abs(a.x - b.x) < 40 and abs(a.y - b.y) < 40):
+    if(abs(a.x - b.x) < d and abs(a.y - b.y) < d ):
         x = True
 
     return x
