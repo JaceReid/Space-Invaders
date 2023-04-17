@@ -1,5 +1,5 @@
 # Import need modules
-import pygame, sys, objects, time, math, random
+import pygame, sys, objects, datetime, math, random
 from button import Button
 import physics, main
 
@@ -12,8 +12,8 @@ a,b,x,y = area
 
 pygame.display.set_caption("Menu")
 
-BG = pygame.image.load("resources/images/game.png")
-game_bg = pygame.image.load("resources/images/bg.png")
+BG = pygame.transform.scale(pygame.image.load("resources/images/bg.jpg"),(x,y))
+game_bg = pygame.image.load("resources/images/bg.jpg")
 
 def update(): #Update the display
     pygame.display.update()
@@ -177,38 +177,47 @@ def main_menu(): # show the main menu screen
 
 def game_state(x,r): # display either a win or game over screen
 
-    timer = time.clock_gettime(time.CLOCK_MONOTONIC_RAW) 
+    timer = datetime.datetime.now()
+    data = [0,""]
+    diff = 0
 
     while True:
         screen.blit(BG, (0,0))
         mouse_pos = pygame.mouse.get_pos()
         render_lines(x,640,200,40) 
-        render_lines("Press S to save score!",640,300,35)
+        render_lines("Press S to save score!",640,600,35)
 
         OPTIONS_BACK = Button(image=None, pos=(640, 460), 
                             text_input="BACK", font=get_font(75), base_color="Black", hovering_color="Green")
 
         OPTIONS_BACK.changeColor(mouse_pos)
         OPTIONS_BACK.update(screen)
-
+        
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_s:
-                   get_name() 
+                   temp_time = datetime.datetime.now()
+                   data[1] = get_name() 
+                   diff = int((datetime.datetime.now() - temp_time)/datetime.timedelta(seconds=1))
+                   print(diff)
+                   
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if OPTIONS_BACK.checkForInput(mouse_pos):
+                    return data
                     main.main()
 
         if r:
-            count = 5 - abs(int((timer - time.clock_gettime(time.CLOCK_MONOTONIC_RAW))))
+            current_count = (timer - datetime.datetime.now()) / datetime.timedelta(seconds=1)
+            count = 5 - abs(int(current_count)) + diff
             
             render_lines(str(count),640,300,30)
 
             if(count == 0):
-                return 1
+                data[0] = 1
+                return data
         pygame.display.update()
 
 def get_name(): # Get the users name to save with the highscore
@@ -273,4 +282,5 @@ def get_name(): # Get the users name to save with the highscore
                     name += "m"
                 if event.key == pygame.K_RETURN:
                     checking = False
+    
     return name

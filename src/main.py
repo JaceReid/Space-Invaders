@@ -42,7 +42,7 @@ def play():
     # Declare and intilze varibles
     BG = gui.load_image("resources/images/game.jpg",None)
     BG = gui.scale_image(BG,area[0],area[1])
-    game_bg = gui.load_image("resources/images/bg.png", None)
+    game_bg = gui.load_image("resources/images/bg.jpg", None)
     image_player = gui.load_image('resources/images/player.bmp',BG)
     image_rocket = gui.load_image('resources/images/rocket.bmp',BG)
     enemys = []
@@ -104,7 +104,7 @@ def play():
             if wave == 5:
                 gui.game_state('YOU WIN!!  score: ' + str(int(score)),0)
                 name = gui.get_name()
-                save_score("James", score)
+                save_score(name, score)
             else:
                 wave += 1
                 play()
@@ -161,11 +161,11 @@ def play():
         # Check the players number of lives if they are hit
         if hit and (tick-last_hit) > 3:
             if player_lives == 1:
-                save_score("James", score)
                 op = gui.game_state("GAME OVER\nSCORE: " + str(score*(wave+1)),1)
-                #gui.get_name()
+                name = op[1]
+                save_score(name, score)
                 wave = 0 
-                if op == 1:
+                if op[0] == 1:
                     play()
             player_lives -= 1
             hit = False
@@ -219,9 +219,10 @@ def play():
 
                 if(enemys[i].y >= area[1]):
                     op = gui.game_state('GAME OVER\nSCORE: ' + str(score),1)
-                    gui.get_name()
+                    name = op[1]
+                    save_score(name, score)
                     wave = 0
-                    if op == 1:
+                    if op[0] == 1:
                         play()
             except:
                 break
