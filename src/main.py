@@ -183,7 +183,7 @@ def play():
                             enemy_rockets.append(class_Manager.make_rocket(image_enemy_rocket, enemys[i].x, enemys[i].y, math.pi))
 
 
-                    if(enemys[i].x <= (area[0]-5) and direction == 0 or enemys[i].x > area[0]):
+                    if(direction == 0):
 
                         if(enemys[i].x >= (area[0]-10)):
                             direction = 1
@@ -199,7 +199,7 @@ def play():
 
                         enemys[i].move(direction)
 
-                    elif(enemys[i].x >= 0 or enemys[i].x <= 0):
+                    else:
 
                         if(enemys[i].x <= 10):
                             direction = 0
