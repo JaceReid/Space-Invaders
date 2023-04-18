@@ -55,11 +55,11 @@ def play():
     image_enemy = gui.scale_image(gui.load_image('resources/images/enemy.png',BG),32,32)
     image_enemy_rocket = gui.scale_image(gui.load_image('resources/images/enemy-rocket.bmp',BG),5,15)
 
-    image_bunker = gui.load_image('resources/images/bunker.bmp',BG)
-    image_bunker = gui.load_image('resources/images/bunker.bmp', BG)
-    image_bunker1 = gui.load_image('resources/images/bunker1.bmp', BG)
-    image_bunker2 = gui.load_image('resources/images/bunker2.bmp', BG)
-    image_bunker3 = gui.load_image('resources/images/bunker3.bmp', BG)
+    image_bunker = gui.load_image('resources/images/bunker.png',BG)
+    image_bunker = gui.load_image('resources/images/bunker.png', BG)
+    image_bunker1 = gui.load_image('resources/images/bunker1.png', BG)
+    image_bunker2 = gui.load_image('resources/images/bunker2.png', BG)
+    image_bunker3 = gui.load_image('resources/images/bunker3.png', BG)
     
     heart = gui.scale_image(gui.load_image('resources/images/heart.png',BG),28,28)
     
