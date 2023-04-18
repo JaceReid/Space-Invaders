@@ -164,7 +164,7 @@ def play():
         # Check the players number of lives if they are hit
         if hit and (tick-last_hit) > 3:
             if player_lives == 1:
-                op = gui.game_state("GAME OVER\nSCORE: " + str(score*(wave+1)),1)
+                op = gui.game_state("GAME OVER\nSCORE: " + str(score),1)
                 name = op[1]
                 save_score(name, score)
                 wave = 0 
