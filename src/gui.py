@@ -105,7 +105,7 @@ def play(a): # show the play screen
         show = True
 
     while show:
-        render_lines("Controls: \nD - move right \nA - move left \nE - rotate clockwise\n Q - rotate counter-clockwise\nX - quit \nPRESS ENTER TO START",640,200,45)
+        render_lines("Controls: \nD - move right \nA - move left \nE - rotate clockwise\n Q - rotate counter-clockwise\nX - quit \nPRESS ENTER TO START",x/2,2*(y/8),45)
 
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
