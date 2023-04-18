@@ -9,6 +9,10 @@ score = 0
 
 
 def main():
+    
+    main_menu_song = pygame.mixer.Sound('resources/sounds/future-invention-upbeat-high-electronic-technological-music-57037.mp3')
+    
+    pygame.mixer.Sound.play(main_menu_song)
 
     # Get the users option from the main menu
     option = ""
@@ -17,9 +21,12 @@ def main():
 
     # Change window depending on the button pressed.
     if option == 'play':
+        pygame.mixer.Sound.stop(main_menu_song)
         play()
         start_time = datetime.datetime.now()
+        
     elif option == 'options':
+        pygame.mixer.Sound.stop(main_menu_song)
         show_scores()
 
     
