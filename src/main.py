@@ -1,6 +1,7 @@
 # Importing modules
 import gui, class_Manager, physics
 import time, random, math, json, datetime
+import pygame
 
 # Declaring global varibles
 wave = 0
@@ -62,6 +63,8 @@ def play():
     image_bunker3 = gui.load_image('resources/images/bunker3.png', BG)
     
     heart = gui.scale_image(gui.load_image('resources/images/heart.png',BG),28,28)
+    
+    shoot_sound = pygame.mixer.Sound('resources/sounds/blaster-2-81267.mp3')
     
 
     r,c = 4,(10+2*wave)
@@ -287,6 +290,9 @@ def play():
 
         if keys == 'Dspace':
             if(tick - last_shot > 2):
+                
+                pygame.mixer.Sound.play(shoot_sound)
+                
                 rocket = class_Manager.make_rocket(image_rocket, player.x, player.y, (player.a)) 
                 rockets.append(rocket)
                 last_shot = count//40
