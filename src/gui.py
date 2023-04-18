@@ -206,8 +206,9 @@ def game_state(string_x,r): # display either a win or game over screen
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if OPTIONS_BACK.checkForInput(mouse_pos):
-                    return data
+                    
                     main.main()
+                    return data
 
         if r:
             current_count = (timer - datetime.datetime.now()) / datetime.timedelta(seconds=1)
