@@ -119,10 +119,10 @@ def highscore(scores): # Show the highscore screen
         mouse_pos = pygame.mouse.get_pos()
 
         screen.blit(BG, (0,0))
-        render_lines("Highscore:" ,640,100,45) 
-        render_lines(scores, 640, 120,30)
+        render_lines("Highscore:" ,x/2,y/8,45) 
+        render_lines(scores, x/2, y/8 + 20,30)
 
-        OPTIONS_BACK = Button(image=None, pos=(640, 700), 
+        OPTIONS_BACK = Button(image=None, pos=(x/2, 7*(y/8)), 
                             text_input="BACK", font=get_font(75), base_color="Black", hovering_color="Green")
 
         OPTIONS_BACK.changeColor(mouse_pos)
@@ -145,13 +145,13 @@ def main_menu(): # show the main menu screen
         mouse_pos = pygame.mouse.get_pos()
 
         menu_text = get_font(100).render("Space Invaders", True, "#b68f40")
-        menu_rect = menu_text.get_rect(center=(640, 100))
+        menu_rect = menu_text.get_rect(center=(x/2, 2*(y/8)))
 
-        PLAY_BUTTON = Button(image=None, pos=(640, 300), 
+        PLAY_BUTTON = Button(image=None, pos=(x/2, 4*(y/8)), 
                             text_input="PLAY", font=get_font(75), base_color="#d7fcd4", hovering_color="Green")
-        OPTIONS_BUTTON = Button(image=None, pos=(640, 400), 
+        OPTIONS_BUTTON = Button(image=None, pos=(x/2, 5*(y/8)), 
                             text_input="HIGHSCORES", font=get_font(75), base_color="#d7fcd4", hovering_color="Green")
-        QUIT_BUTTON = Button(image=None, pos=(640, 500), 
+        QUIT_BUTTON = Button(image=None, pos=(x/2, 6*(y/8)), 
                             text_input="QUIT", font=get_font(75), base_color="#d7fcd4", hovering_color="Green")
 
         screen.blit(menu_text, menu_rect)
@@ -175,7 +175,7 @@ def main_menu(): # show the main menu screen
 
         pygame.display.update()
 
-def game_state(x,r): # display either a win or game over screen
+def game_state(string_x,r): # display either a win or game over screen
 
     timer = datetime.datetime.now()
     data = [0,""]
@@ -184,10 +184,10 @@ def game_state(x,r): # display either a win or game over screen
     while True:
         screen.blit(BG, (0,0))
         mouse_pos = pygame.mouse.get_pos()
-        render_lines(x,640,200,40) 
-        render_lines("Press S to save score!",640,600,35)
+        render_lines(string_x,x/2,2*(y/8),40) 
+        render_lines("Press S to save score!",x/2,6*(y/8),35)
 
-        OPTIONS_BACK = Button(image=None, pos=(640, 460), 
+        OPTIONS_BACK = Button(image=None, pos=(x/2, 5*(y/8)), 
                             text_input="BACK", font=get_font(75), base_color="Black", hovering_color="Green")
 
         OPTIONS_BACK.changeColor(mouse_pos)
