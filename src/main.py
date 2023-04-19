@@ -112,9 +112,13 @@ def play():
         if (len(enemys) == 0):
 
             if wave == 5:
-                gui.game_state('YOU WIN!!  score: ' + str(int(score)),0)
-                name = gui.get_name()
-                save_score(name, score)
+                
+                op2 = gui.game_state('YOU WIN!!  score: ' + str(int(score)),0)
+                
+                if op2[2]:
+                    name = op2[1]
+                    save_score(name, score)
+                    
             else:
                 wave += 1
                 play()
@@ -171,12 +175,16 @@ def play():
         # Check the players number of lives if they are hit
         if hit and (tick-last_hit) > 3:
             if player_lives == 1:
-                op = gui.game_state("GAME OVER\nSCORE: " + str(score),1)
-                name = op[1]
-                save_score(name, score)
+                op1 = gui.game_state("GAME OVER\nSCORE: " + str(score),1)
+                
+                if op1[2]:
+                    name = op1[1]
+                    save_score(name, score)
+                    
                 wave = 0 
-                if op[0] == 1:
+                if op1[0] == 1:
                     play()
+                    
             player_lives -= 1
             hit = False
             last_hit = count//40
