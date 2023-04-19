@@ -48,11 +48,11 @@ def play():
     area = gui.get_area()
 
     # Declare and intilze varibles
-    BG = gui.load_image("resources/images/game.jpg",None)
-    BG = gui.scale_image(BG,area[0],area[1])
+    Background = gui.load_image("resources/images/game.jpg",None)
+    Background = gui.scale_image(Background,area[0],area[1])
     game_bg = gui.load_image("resources/images/bg.jpg", None)
-    image_player = gui.load_image('resources/images/player.bmp',BG)
-    image_rocket = gui.load_image('resources/images/rocket.bmp',BG)
+    image_player = gui.load_image('resources/images/player.bmp',Background)
+    image_rocket = gui.load_image('resources/images/rocket.bmp',Background)
     enemys = []
     bunkers = []
     startx = 50
@@ -60,16 +60,16 @@ def play():
     moving = [False,False]
     turning = [False,False]
 
-    image_enemy = gui.scale_image(gui.load_image('resources/images/enemy.png',BG),32,32)
-    image_enemy_rocket = gui.scale_image(gui.load_image('resources/images/enemy-rocket.bmp',BG),5,15)
+    image_enemy = gui.scale_image(gui.load_image('resources/images/enemy.png',Background),32,32)
+    image_enemy_rocket = gui.scale_image(gui.load_image('resources/images/enemy-rocket.bmp',Background),5,15)
 
-    image_bunker = gui.load_image('resources/images/bunker.png',BG)
-    image_bunker = gui.load_image('resources/images/bunker.png', BG)
-    image_bunker1 = gui.load_image('resources/images/bunker1.png', BG)
-    image_bunker2 = gui.load_image('resources/images/bunker2.png', BG)
-    image_bunker3 = gui.load_image('resources/images/bunker3.png', BG)
+    image_bunker = gui.load_image('resources/images/bunker.png',Background)
+    image_bunker = gui.load_image('resources/images/bunker.png', Background)
+    image_bunker1 = gui.load_image('resources/images/bunker1.png', Background)
+    image_bunker2 = gui.load_image('resources/images/bunker2.png', Background)
+    image_bunker3 = gui.load_image('resources/images/bunker3.png', Background)
     
-    heart = gui.scale_image(gui.load_image('resources/images/heart.png',BG),28,28)
+    heart = gui.scale_image(gui.load_image('resources/images/heart.png',Background),28,28)
     
     shoot_sound = pygame.mixer.Sound('resources/sounds/blaster-2-81267.mp3')
     
@@ -106,7 +106,7 @@ def play():
     # Game loop
     while True:
 
-        gui.clear_screen(BG)
+        gui.clear_screen(Background)
 
         # If all enemys are dead
         if (len(enemys) == 0):
