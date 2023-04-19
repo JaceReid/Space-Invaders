@@ -74,7 +74,7 @@ def play():
     shoot_sound = pygame.mixer.Sound('resources/sounds/blaster-2-81267.mp3')
     
 
-    r,c = 4,(10+2*wave)
+    enemy_rows,enemy_columns = 4,(10+2*wave)
     player_lives = 3
     shooting = False
     rockets = []
@@ -93,9 +93,9 @@ def play():
     player = class_Manager.make_player(image_player, area[0]//2,area[1]-20)
 
     # Set the postions for all the enemys
-    for i in range(r):
+    for i in range(enemy_rows):
         enemy_y = starty+(50*i)
-        for j in range(c):
+        for j in range(enemy_columns):
             enemy_x = startx+(j*50) 
             
             enemys.append(class_Manager.make_enemy(image_enemy,enemy_x,enemy_y,2+1*wave))
@@ -207,11 +207,11 @@ def play():
                             direction = 1
                         
 
-                            for h in range(r*c): 
+                            for h in range(enemy_rows*enemy_columns): 
                                 if enemys[h].speed < 14:
                                     enemys[h].speed += 2
                                 enemys[h].y += 25
-                                enemys[h].x = area[0]-10 - 50*(h%(c-1))
+                                enemys[h].x = area[0]-10 - 50*(h%(enemy_columns-1))
 
                             
 
@@ -221,11 +221,11 @@ def play():
 
                         if(enemys[i].x <= 10):
                             direction = 0
-                            for h in range(r*c): 
+                            for h in range(enemy_rows*enemy_columns): 
                                 if enemys[h].speed < 14:
                                     enemys[h].speed += 2
                                 enemys[h].y += 25
-                                enemys[h].x = 10 + 50*(h%(c-1))
+                                enemys[h].x = 10 + 50*(h%(enemy_columns-1))
 
 
                         enemys[i].move(direction) 
