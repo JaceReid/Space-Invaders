@@ -125,7 +125,7 @@ def play():
 
             if (random.randint(0,2) > 1):
                 
-                bx = 50 +400*random.randint(0,5)
+                bx = (area[0]/5) + (area[0]/5)*random.randint(0,5)
                 add_bunker = True
 
                 for i in range(len(bunkers_pos)):
