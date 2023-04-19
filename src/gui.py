@@ -115,6 +115,10 @@ def play(a): # show the play screen
         pygame.display.update()
     
 def highscore(scores): # Show the highscore screen
+    
+    highscore_screen_music = pygame.mixer.Sound('resources/sounds/spirit-of-adventure-powerful-opening-146810.mp3')
+    pygame.mixer.Sound.play(highscore_screen_music)
+    
     while True:
         mouse_pos = pygame.mouse.get_pos()
 
@@ -134,6 +138,8 @@ def highscore(scores): # Show the highscore screen
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if OPTIONS_BACK.checkForInput(mouse_pos):
+                    
+                    pygame.mixer.Sound.stop(highscore_screen_music)
                     main.main()
 
         pygame.display.update()
