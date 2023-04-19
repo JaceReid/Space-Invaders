@@ -85,20 +85,20 @@ def play():
     hit = False
     last_hit = 0
     startx,starty = 100,50
-    ex,ey = 0,0
+    enemy_x,enemy_y = 0,0
     bunkers_pos = []
-    bx,by = 0,(area[1]-100)
+    bunker_x,bunker_y = 0,(area[1]-100)
 
 
     player = class_Manager.make_player(image_player, area[0]//2,area[1]-20)
 
     # Set the postions for all the enemys
     for i in range(r):
-        ey = starty+(50*i)
+        enemy_y = starty+(50*i)
         for j in range(c):
-            ex = startx+(j*50) 
+            enemy_x = startx+(j*50) 
             
-            enemys.append(class_Manager.make_enemy(image_enemy,ex,ey,2+1*wave))
+            enemys.append(class_Manager.make_enemy(image_enemy,enemy_x,enemy_y,2+1*wave))
 
 
     gui.clear_screen(game_bg)
@@ -125,16 +125,16 @@ def play():
 
             if (random.randint(0,2) > 1):
                 
-                bx = (area[0]/6) + (area[0]/6)*random.randint(0,4)
+                bunker_x = (area[0]/6) + (area[0]/6)*random.randint(0,4)
                 add_bunker = True
 
                 for i in range(len(bunkers_pos)):
                     
-                    if bunkers_pos[i][0] == bx:
+                    if bunkers_pos[i][0] == bunker_x:
                         add_bunker = False
                 if add_bunker:
-                    bunkers.append(class_Manager.make_bunker(image_bunker,bx,by))
-                    bunkers_pos.append([bx,by])
+                    bunkers.append(class_Manager.make_bunker(image_bunker,bunker_x,bunker_y))
+                    bunkers_pos.append([bunker_x,bunker_y])
 
             
         for i in range(len(bunkers)):
