@@ -57,8 +57,9 @@ def play():
     bunkers = []
     startx = 50
     starty = 50
-    moving = [False,False]
+    moving = [False,False,False,False]
     turning = [False,False]
+    second = True
 
     image_enemy = gui.scale_image(gui.load_image('resources/images/enemy.png',Background),32,32)
     image_enemy_rocket = gui.scale_image(gui.load_image('resources/images/enemy-rocket.bmp',Background),5,15)
@@ -75,23 +76,30 @@ def play():
     
 
     enemy_rows,enemy_columns = 4,(10+2*wave)
-    player_lives = 3
-    shooting = False
-    rockets = []
+    player_1_lives = 3
+    player_2_lives = 3
+    shooting_1 = False
+    shooting_2 = False
+    rockets_1 = []
+    rockets_2 = []
     enemy_rockets = []
     enemy_dead = False
 
-    count, direction, tick, last_shot= 0,0,0,0
-    hit = False
-    last_hit = 0
+    count, direction, last_hit= 0,0,0
+    tick_1, tick_2 = 0,0
+    hit_1, hit_2 = False, False
+    last_shot_1, last_shot_2 = 0,0 
     startx,starty = 100,50
     enemy_x,enemy_y = 0,0
     bunkers_pos = []
     bunker_x,bunker_y = 0,(area[1]-100)
 
-
-    player = class_Manager.make_player(image_player, area[0]//2,area[1]-20)
-
+    # Creates the first player
+    player_1 = class_Manager.make_player(image_player, area[0]//2,area[1]-20)
+    
+    # Creates the second player
+    player_2 = class_Manager.make_player(image_player, area[0]//2-20,area[1]-80)
+    
     # Set the postions for all the enemys
     for i in range(enemy_rows):
         enemy_y = starty+(50*i)
@@ -112,13 +120,11 @@ def play():
         if (len(enemys) == 0):
 
             if wave == 5:
-                
                 op2 = gui.game_state('YOU WIN!!  score: ' + str(int(score)),0)
-                
+
                 if op2[2]:
                     name = op2[1]
                     save_score(name, score)
-                    
             else:
                 wave += 1
                 play()
@@ -156,9 +162,13 @@ def play():
             gui.draw_object(bunkers[i].image, bunkers[i].r)
 
         # Check if player or enemy rockets hit the bunkers and then have a rondom chance of doing damage
-            for j in range(len(rockets)):
-                if physics.colision(rockets[j],bunkers[i],30):
-                    del rockets[j]
+            for j in range(len(rockets_1)):
+                if physics.colision(rockets_1[j],bunkers[i],30):
+                    del rockets_1[j]
+                    bunkers[i].damage()
+            for j in range(len(rockets_2)):
+                if physics.colision(rockets_2[j],bunkers[i],30):
+                    del rockets_2[j]
                     bunkers[i].damage()
 
             for j in range(len(enemy_rockets)):
@@ -168,26 +178,40 @@ def play():
                     bunkers[i].damage()
                     break
 
-                if physics.colision(enemy_rockets[j],player,20):
-                    hit = True
+                if physics.colision(enemy_rockets[j],player_1,20):
+                    hit_1 = True
+                    break
+                if physics.colision(enemy_rockets[j],player_2,20):
+                    hit_2 = True
                     break
 
-        # Check the players number of lives if they are hit
-        if hit and (tick-last_hit) > 3:
-            if player_lives == 1:
+        # Check the first players number of lives if they are hit
+        if hit_1 and (tick_1-last_hit) > 3:
+            if player_1_lives == 1 or player_2_lives == 1:
                 op1 = gui.game_state("GAME OVER\nSCORE: " + str(score),1)
-                
-                if op1[2]:
-                    name = op1[1]
-                    save_score(name, score)
-                    
+                name = op1[1]
+                save_score(name, score)
                 wave = 0 
                 if op1[0] == 1:
                     play()
-                    
-            player_lives -= 1
-            hit = False
+            player_1_lives -= 1            
+            hit_1 = False
             last_hit = count//40
+        if second:
+            # Check the second players number of lives if they are hit
+            if  hit_2 and (tick_2 - last_hit) > 3:
+                if player_2_lives == 1:
+                    op1 = gui.game_state("GAME OVER\nSCORE: " + str(score),1)
+                    name = op1[1]
+                    save_score(name, score)
+                    wave = 0 
+                    if op1[0] == 1:
+                        play()
+                
+                player_2_lives -= 1
+                hit_2 = False
+                last_hit = count//40
+            
 
 
 
@@ -207,7 +231,7 @@ def play():
                             direction = 1
                         
 
-                            for h in range(enemy_rows*enemy_columns): 
+                            for h in range(enemy_rows*enemy_columns):
                                 if enemys[h].speed < 14:
                                     enemys[h].speed += 2
                                 enemys[h].y += 25
@@ -221,7 +245,7 @@ def play():
 
                         if(enemys[i].x <= 10):
                             direction = 0
-                            for h in range(enemy_rows*enemy_columns): 
+                            for h in range(enemy_rows*enemy_columns):
                                 if enemys[h].speed < 14:
                                     enemys[h].speed += 2
                                 enemys[h].y += 25
@@ -247,25 +271,46 @@ def play():
 
 
                 
-
-            for h in range(len(rockets)):
-                if physics.colision(rockets[h], enemys[i],30):
-                    del rockets[h]
+            # checks for collision between the first players rocket and an enemy
+            for h in range(len(rockets_1)):
+                if physics.colision(rockets_1[h], enemys[i],30):
+                    del rockets_1[h]
                     del enemys[i]
                     score += 10*(wave+1)
-                    break
-
+                    break                      
+                        
+            if second:
+                # checks for collision between the second players rocket and an enemy
+                for h in range(len(rockets_2)):
+                    if physics.colision(rockets_2[h], enemys[i],30):
+                        del rockets_2[h]
+                        del enemys[i]
+                        score += 10*(wave+1)
+                        break
 
     
 
-        # Move the rockets from the player
-        if shooting:
-            for i in range(len(rockets)):
+        # Move the rockets from the first player
+        if shooting_1:
+            for i in range(len(rockets_1)):
                 if(count % 5 == 0):
-                    rockets[i].move(False) 
-                    rockets[i].r = gui.get_image_rect(rockets[i].image,rockets[i].x,rockets[i].y)
+                    rockets_1[i].move(False) 
+                    rockets_1[i].r = gui.get_image_rect(rockets_1[i].image,rockets_1[i].x,rockets_1[i].y)
 
-                gui.draw_object(gui.rotate_image(rockets[i].image, rockets[i].a), rockets[i].r)
+                gui.draw_object(gui.rotate_image(rockets_1[i].image, rockets_1[i].a), rockets_1[i].r)
+        
+        
+        if second:
+            # Move the rockets from the second player
+            if shooting_2:
+                for j in range(len(rockets_2)):
+                    if(count % 5 == 0):
+                        rockets_2[j].move(False) 
+                        rockets_2[j].r = gui.get_image_rect(rockets_2[j].image,rockets_2[j].x,rockets_2[j].y)
+
+                    gui.draw_object(gui.rotate_image(rockets_2[j].image, rockets_2[j].a), rockets_2[j].r)
+                
+        
 
 
         # Move the enemy rockets
@@ -276,9 +321,14 @@ def play():
             gui.draw_object(enemy_rockets[i].image, enemy_rockets[i].r)
 
 
-        # draw the player lives
-        for i in range(player_lives):
+        # draw the first players lives
+        for i in range(player_1_lives):
             gui.draw_object(heart, gui.get_image_rect(heart,30+i*20,area[1]-30))
+        
+        if second:
+        # draw the second players lives
+            for j in range(player_2_lives):
+                gui.draw_object(heart, gui.get_image_rect(heart,30+j*20,area[1]-70))
 
         # display score
         gui.render_lines("score: " + str(score),area[0]//2,25,30)
@@ -304,15 +354,15 @@ def play():
             turning[0] = True
 
         if keys == 'Dspace':
-            if(tick - last_shot > 2):
+            if(tick_1 - last_shot_1 > 2):
                 
                 pygame.mixer.Sound.play(shoot_sound)
                 
-                rocket = class_Manager.make_rocket(image_rocket, player.x, player.y, (player.a)) 
-                rockets.append(rocket)
-                last_shot = count//40
+                rocket_1 = class_Manager.make_rocket(image_rocket, player_1.x, player_1.y, (player_1.a)) 
+                rockets_1.append(rocket_1)
+                last_shot_1 = count//40
 
-            shooting = True
+            shooting_1 = True
             
         if keys == 'Ud':
             moving[1] = False
@@ -328,35 +378,82 @@ def play():
 
 
         if(moving[1] == True):
-            if(player.x < area[0]):
-                player.move(0)
+            if(player_1.x < area[0]):
+                player_1.move(0)
 
         if(moving[0] == True):
-            if(player.x > 0):
-                player.move(1)
+            if(player_1.x > 0):
+                player_1.move(1)
 
         if(turning[1] == True):
-            if player.a > -45:
-                player.a -= 0.5
+            if player_1.a > -45:
+                player_1.a -= 0.5
 
 
         if(turning[0] == True):
-            if player.a < 45:
-                player.a += 0.5
+            if player_1.a < 45:
+                player_1.a += 0.5
+                
+        #checks the keys for the second player movement
+        if second:
+            if keys == 'Dright':
+                moving[3] = True
 
+            if keys == 'Dleft':
+                moving[2] = True
+
+
+            if keys == 'Dup':
+                if(tick_2 - last_shot_2 > 2):
+                    
+                    #pygame.mixer.Sound.play(shoot_sound)
+                    
+                    rocket_2 = class_Manager.make_rocket(image_rocket, player_2.x, player_2.y, (player_2.a)) 
+                    rockets_2.append(rocket_2)
+                    last_shot_2 = count//40
+
+                shooting_2 = True
+                
+            if keys == 'Uright':
+                moving[3] = False
+
+            if keys == 'Uleft':
+                moving[2] = False
+           
+            if(moving[3] == True):
+                if(player_2.x < area[0]):
+                    player_2.move(0)
+
+            if(moving[2] == True):
+                if(player_2.x > 0):
+                    player_2.move(1)
         
-        if tick < 10:
+                
+                
+        
+        
+        if tick_1 < 10 or tick_2 < 10:
             gui.render_lines("wave " + str(wave + 1),area[0]//2,area[1]//2,40)
 
 
 
         # get count
         if(count%40 == 0):
-            tick = count // 40
+            tick_1 = count // 40
+            if second:
+                tick_2 = count // 40
         count += 1
 
-        gui.draw_object(gui.rotate_image(player.image, player.a), player.r)
+        # draws the player
+        gui.draw_object(gui.rotate_image(player_1.image, player_1.a), player_1.r)
+        if second:
+            gui.draw_object(gui.rotate_image(player_2.image, player_2.a), player_2.r)
         gui.update()
+        
+        if keys == 'Active':
+            second == True
+        
+
 
 # Displays the highscores in the right formate
 def show_scores():
