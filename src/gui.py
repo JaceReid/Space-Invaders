@@ -82,7 +82,17 @@ def get_keys(): # get the keys pressed by the user with pygame
                 return 'Dq'
 
             if event.key == pygame.K_SPACE:
-                return 'Dspace' 
+                return 'Dspace'                           
+            
+            if event.key == pygame.K_RIGHT:
+                return 'Dright'
+                
+            if event.key == pygame.K_LEFT:
+                return 'Dleft'
+                
+            if event.key == pygame.K_UP:
+                return 'Dup'           
+                                        
 
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_d:
@@ -94,7 +104,17 @@ def get_keys(): # get the keys pressed by the user with pygame
                 return 'Ue'
 
             if event.key == pygame.K_q:
-                return 'Uq'
+                return 'Uq'                            
+            
+            if event.key == pygame.K_RIGHT:
+                return 'Uright'
+                
+            if event.key == pygame.K_LEFT:
+                return 'Uleft'
+                
+            if event.key == pygame.K_UP:
+                return 'Uup'
+                            
 
 def play(a): # show the play screen
 
@@ -115,7 +135,7 @@ def play(a): # show the play screen
         pygame.display.update()
     
 def highscore(scores): # Show the highscore screen
-    
+
     highscore_screen_music = pygame.mixer.Sound('resources/sounds/spirit-of-adventure-powerful-opening-146810.mp3')
     pygame.mixer.Sound.play(highscore_screen_music)
     
@@ -138,7 +158,7 @@ def highscore(scores): # Show the highscore screen
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if OPTIONS_BACK.checkForInput(mouse_pos):
-                    
+                
                     pygame.mixer.Sound.stop(highscore_screen_music)
                     main.main()
 
