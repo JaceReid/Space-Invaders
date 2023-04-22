@@ -288,6 +288,7 @@ def play():
                     if physics.colision(rockets_2[h], enemys[i],30):
                         del rockets_2[h]
                         del enemys[i]
+                        pygame.mixer.Sound.play(enemy_dead)
                         score += 10*(wave+1)
                         break
 
@@ -413,7 +414,7 @@ def play():
             if keys == 'Dup':
                 if(tick_2 - last_shot_2 > 2):
                     
-                    #pygame.mixer.Sound.play(shoot_sound)
+                    pygame.mixer.Sound.play(shoot_sound)
                     
                     rocket_2 = class_Manager.make_rocket(image_rocket, player_2.x, player_2.y, (player_2.a)) 
                     rockets_2.append(rocket_2)
