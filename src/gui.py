@@ -92,6 +92,9 @@ def get_keys(): # get the keys pressed by the user with pygame
                 
             if event.key == pygame.K_UP:
                 return 'Dup'           
+
+            if event.key == pygame.K_2:
+                return '2'           
                                         
 
         if event.type == pygame.KEYUP:
@@ -125,7 +128,7 @@ def play(a): # show the play screen
         show = True
 
     while show:
-        render_lines("Controls: \nD - move right \nA - move left \nE - rotate clockwise\n Q - rotate counter-clockwise\nX - quit \nPRESS ENTER TO START",x/2,2*(y/8),45)
+        render_lines("Controls: \nD - move right \nA - move left \nE - rotate clockwise\n Q - rotate counter-clockwise\n 2 - add second player\nX - quit \nPRESS ENTER TO START",x/2,2*(y/8),45)
 
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:

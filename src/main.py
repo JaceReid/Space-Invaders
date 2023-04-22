@@ -59,7 +59,6 @@ def play():
     starty = 50
     moving = [False,False,False,False]
     turning = [False,False]
-    second = True
 
     image_enemy = gui.scale_image(gui.load_image('resources/images/enemy.png',Background),32,32)
     image_enemy_rocket = gui.scale_image(gui.load_image('resources/images/enemy-rocket.bmp',Background),5,15)
@@ -72,8 +71,8 @@ def play():
     
     heart = gui.scale_image(gui.load_image('resources/images/heart.png',Background),28,28)
     
-    shoot_sound = pygame.mixer.Sound('resources/sounds/blaster-2-81267.mp3')
-    
+    shoot_sound = pygame.mixer.Sound('resources/sounds/rocket.mp3')
+    enemy_dead = pygame.mixer.Sound('resources/sounds/enemy-dead.mp3')
 
     enemy_rows,enemy_columns = 4,(10+2*wave)
     player_1_lives = 3
@@ -83,11 +82,12 @@ def play():
     rockets_1 = []
     rockets_2 = []
     enemy_rockets = []
-    enemy_dead = False
 
     count, direction, last_hit= 0,0,0
     tick_1, tick_2 = 0,0
     hit_1, hit_2 = False, False
+    two_player = False
+    
     last_shot_1, last_shot_2 = 0,0 
     startx,starty = 100,50
     enemy_x,enemy_y = 0,0
@@ -115,6 +115,7 @@ def play():
     while True:
 
         gui.clear_screen(Background)
+        wait = False
 
         # If all enemys are dead
         if (len(enemys) == 0):
@@ -181,13 +182,14 @@ def play():
                 if physics.colision(enemy_rockets[j],player_1,20):
                     hit_1 = True
                     break
-                if physics.colision(enemy_rockets[j],player_2,20):
-                    hit_2 = True
-                    break
+                if two_player:
+                   if physics.colision(enemy_rockets[j],player_2,20):
+                        hit_2 = True
+                        break
 
         # Check the first players number of lives if they are hit
         if hit_1 and (tick_1-last_hit) > 3:
-            if player_1_lives == 1 or player_2_lives == 1:
+            if player_1_lives == 1:
                 op1 = gui.game_state("GAME OVER\nSCORE: " + str(score),1)
                 name = op1[1]
                 save_score(name, score)
@@ -197,7 +199,7 @@ def play():
             player_1_lives -= 1            
             hit_1 = False
             last_hit = count//40
-        if second:
+        if two_player:
             # Check the second players number of lives if they are hit
             if  hit_2 and (tick_2 - last_hit) > 3:
                 if player_2_lives == 1:
@@ -276,10 +278,11 @@ def play():
                 if physics.colision(rockets_1[h], enemys[i],30):
                     del rockets_1[h]
                     del enemys[i]
+                    pygame.mixer.Sound.play(enemy_dead)
                     score += 10*(wave+1)
                     break                      
                         
-            if second:
+            if two_player:
                 # checks for collision between the second players rocket and an enemy
                 for h in range(len(rockets_2)):
                     if physics.colision(rockets_2[h], enemys[i],30):
@@ -300,7 +303,7 @@ def play():
                 gui.draw_object(gui.rotate_image(rockets_1[i].image, rockets_1[i].a), rockets_1[i].r)
         
         
-        if second:
+        if two_player:
             # Move the rockets from the second player
             if shooting_2:
                 for j in range(len(rockets_2)):
@@ -325,7 +328,7 @@ def play():
         for i in range(player_1_lives):
             gui.draw_object(heart, gui.get_image_rect(heart,30+i*20,area[1]-30))
         
-        if second:
+        if two_player:
         # draw the second players lives
             for j in range(player_2_lives):
                 gui.draw_object(heart, gui.get_image_rect(heart,30+j*20,area[1]-70))
@@ -340,6 +343,10 @@ def play():
 
         if keys == 'Dx':
             main()
+
+        if keys == '2':
+            two_player = True
+            wait = True
 
         if keys == 'Dd':
             moving[1] = True
@@ -395,7 +402,7 @@ def play():
                 player_1.a += 0.5
                 
         #checks the keys for the second player movement
-        if second:
+        if two_player and wait == False:
             if keys == 'Dright':
                 moving[3] = True
 
@@ -419,14 +426,15 @@ def play():
 
             if keys == 'Uleft':
                 moving[2] = False
-           
-            if(moving[3] == True):
-                if(player_2.x < area[0]):
-                    player_2.move(0)
+          
+            if two_player and wait == False:
+                if(moving[3] == True):
+                    if(player_2.x < area[0]):
+                        player_2.move(0)
 
-            if(moving[2] == True):
-                if(player_2.x > 0):
-                    player_2.move(1)
+                if(moving[2] == True):
+                    if(player_2.x > 0):
+                        player_2.move(1)
         
                 
                 
@@ -440,18 +448,16 @@ def play():
         # get count
         if(count%40 == 0):
             tick_1 = count // 40
-            if second:
+            if two_player and wait == False:
                 tick_2 = count // 40
         count += 1
 
         # draws the player
         gui.draw_object(gui.rotate_image(player_1.image, player_1.a), player_1.r)
-        if second:
+        if two_player and wait == False:
             gui.draw_object(gui.rotate_image(player_2.image, player_2.a), player_2.r)
         gui.update()
         
-        if keys == 'Active':
-            second == True
         
 
 
