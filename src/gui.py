@@ -226,9 +226,8 @@ def game_state(string_x,r): # display either a win or game over screen
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_s:
                    temp_time = datetime.datetime.now()
-                   data[1] = get_name() 
+                   data[1] = get_name(string_x) 
                    diff = int((datetime.datetime.now() - temp_time)/datetime.timedelta(seconds=1))
-                   print(diff)
                    
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -250,12 +249,14 @@ def game_state(string_x,r): # display either a win or game over screen
                 return data
         pygame.display.update()
 
-def get_name(): # Get the users name to save with the highscore
+def get_name(string_x): # Get the users name to save with the highscore
 
     name = ""
     checking = True
 
     while checking:
+        screen.blit(BG, (0,0))
+        render_lines(string_x,x/2,2*(y/8),40) 
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_q:
@@ -310,7 +311,13 @@ def get_name(): # Get the users name to save with the highscore
                     name += "n"
                 if event.key == pygame.K_m:
                     name += "m"
+                if event.key == pygame.K_SPACE:
+                    name += " "
+                if event.key == pygame.K_BACKSPACE:
+                    name = name[:-1]
                 if event.key == pygame.K_RETURN:
                     checking = False
     
+                render_lines(name,x/2,2*(y/5),40) 
+                pygame.display.update()
     return name
