@@ -58,6 +58,7 @@ def play():
 
     
  # Declaring and initialising varibles begins here
+
     
     #object and background visuals
     Background = gui.load_image("resources/images/game.jpg",None)
@@ -352,7 +353,6 @@ def play():
                     rockets_1[i].r = gui.get_image_rect(rockets_1[i].image,rockets_1[i].x,rockets_1[i].y)
 
                 gui.draw_object(gui.rotate_image(rockets_1[i].image, rockets_1[i].a), rockets_1[i].r)
-        
         
         if two_player: #if the second player is active
             
