@@ -558,6 +558,8 @@ def play():
         
         if two_player and wait == False: # if second player is active
             gui.draw_object(gui.rotate_image(player_2.image, player_2.a), player_2.r)
+            
+        #updates display
         gui.update()
         
 # Displays the highscores in the right formate
@@ -582,7 +584,6 @@ def show_scores():
 # save a new high score to the json file
 def save_score(name, score):
 
-
     date = str(datetime.datetime.now())
     name = name + "~" + date
 
@@ -590,13 +591,9 @@ def save_score(name, score):
     
     values = []
 
-    
-
-
    # data[name] = score
 
     data.update({name: score})
-
 
     with open('data/highscore.json', 'w') as f:
         json.dump(data, f)
