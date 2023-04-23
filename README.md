@@ -1,8 +1,6 @@
 # Space Invaders
 
-==========
 Group number: 10
-==========
 
 ## Group members:
 
