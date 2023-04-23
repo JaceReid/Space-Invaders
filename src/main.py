@@ -105,7 +105,10 @@ def play():
     rockets_2 = []
     enemy_rockets = []
 
-    count, direction, last_hit= 0,0,0
+    # Direction of enemy movement = 0 : to the right
+    direction = 0
+    
+    count, last_hit= 0,0
     tick_1, tick_2 = 0,0
     hit_1, hit_2 = False, False
     two_player = False
@@ -257,45 +260,58 @@ def play():
 
                     if(i > (len(enemys)-len(enemys)/4)):
                         
-                        #random chance of dropping an enemy rocket by appending it to the enemy rockets list
+                        #random chance of appending to the enemy rockets list
                         if random.randint(0,100) > 99:
                             enemy_rockets.append(class_Manager.make_rocket(image_enemy_rocket, enemys[i].x, enemys[i].y, math.pi))
 
-
+                    # if direction of travel is towards the right
                     if(direction == 0):
 
+                        # if the enemy has reached the right hand side of the screen, set direction of enemy movement to the left
                         if(enemys[i].x >= (area[0]-10)):
                             direction = 1
                         
-
+                            # for all enemies in the enemy list
                             for h in range(enemy_rows*enemy_columns):
+                                
+                                # if the enemy speed is smaller than the max speed of 14, increase speed because enemy cloud moved lower
                                 if enemys[h].speed < 14:
                                     enemys[h].speed += 2
+                                
+                                # move enemy cloud lower on the display
                                 enemys[h].y += 25
+                                
+                                # set new x position of each enemy 
                                 enemys[h].x = area[0]-10 - 50*(h%(enemy_columns-1))
 
-                            
-
+                        # let the enemies move in the current direction: 1 or 0
                         enemys[i].move(direction)
 
-                    else:
+                    # if the enemy cloud has reached the left hand side of the screen, set direction of enemy movement to the right
+                    else: 
 
                         if(enemys[i].x <= 10):
                             direction = 0
+                            
                             for h in range(enemy_rows*enemy_columns):
+                                
+                                #if speed of enemies is lower than the max of 14, increase the enemy speed by 2
                                 if enemys[h].speed < 14:
                                     enemys[h].speed += 2
+                                    
+                                #move enemies down and set new x positions of each enemy
                                 enemys[h].y += 25
                                 enemys[h].x = 10 + 50*(h%(enemy_columns-1))
 
-
+                        #let the enemies move in the current direction: 1 or 0
                         enemys[i].move(direction) 
-
+                        
+                # draw enemy images in their current positions/rectangles
                 gui.get_image_rect(enemys[i].image,enemys[i].x,enemys[i].y)
 
                 gui.draw_object(enemys[i].image, enemys[i].r)
                 
-
+                #if the enemies position reaches the bottom of the screen, game over state is displayed
                 if(enemys[i].y >= area[1]):
                     op = gui.game_state('GAME OVER\nSCORE: ' + str(score),1,score)
                     wave = 0
@@ -303,30 +319,31 @@ def play():
                         play()
             except:
                 break
-
-
-                
+             
             # checks for collision between the first players rocket and an enemy
             for h in range(len(rockets_1)):
                 if physics.colision(rockets_1[h], enemys[i],30):
+                    
+                    #deletes both the player rocket and the enemy
                     del rockets_1[h]
                     del enemys[i]
                     pygame.mixer.Sound.play(enemy_dead)
                     score += 10*(wave+1)
                     break                      
                         
-            if two_player:
+            if two_player: #if the second player is active
+                
                 # checks for collision between the second players rocket and an enemy
                 for h in range(len(rockets_2)):
                     if physics.colision(rockets_2[h], enemys[i],30):
+                        
+                        #deletes both the player rocket and the enemy
                         del rockets_2[h]
                         del enemys[i]
                         pygame.mixer.Sound.play(enemy_dead)
                         score += 10*(wave+1)
                         break
-
-    
-
+                        
         # Move the rockets from the first player
         if shooting_1:
             for i in range(len(rockets_1)):
@@ -337,7 +354,8 @@ def play():
                 gui.draw_object(gui.rotate_image(rockets_1[i].image, rockets_1[i].a), rockets_1[i].r)
         
         
-        if two_player:
+        if two_player: #if the second player is active
+            
             # Move the rockets from the second player
             if shooting_2:
                 for j in range(len(rockets_2)):
@@ -347,9 +365,6 @@ def play():
 
                     gui.draw_object(gui.rotate_image(rockets_2[j].image, rockets_2[j].a), rockets_2[j].r)
                 
-        
-
-
         # Move the enemy rockets
         for i in range(len(enemy_rockets)):
             if(count % 10 == 0):
@@ -357,24 +372,26 @@ def play():
                 enemy_rockets[i].r = gui.get_image_rect(enemy_rockets[i].image,enemy_rockets[i].x,enemy_rockets[i].y)
             gui.draw_object(enemy_rockets[i].image, enemy_rockets[i].r)
 
-
         # draw the first players lives
         for i in range(player_1_lives):
             gui.draw_object(heart, gui.get_image_rect(heart,30+i*20,area[1]-30))
         
-        if two_player:
-        # draw the second players lives
+        if two_player: # if the second player is active
+            
+            # draw the second players lives
             for j in range(player_2_lives):
                 gui.draw_object(heart, gui.get_image_rect(heart,30+j*20,area[1]-70))
 
-        # display score
+        # display score throughout gameplay
         gui.render_lines("score: " + str(score),area[0]//2,25,30)
 
-
-
-        # check user key presses and do actions acroudingly
+        # check user key presses and do actions accordingly
         keys = gui.get_keys()
+        
+        
+     # down keys begin here
 
+        
         if keys == 'Dx':
             main()
 
@@ -394,6 +411,7 @@ def play():
         if keys == 'Dq':
             turning[0] = True
 
+        #shooting command for first player
         if keys == 'Dspace':
             if(tick_1 - last_shot_1 > 2):
                 
@@ -405,6 +423,13 @@ def play():
 
             shooting_1 = True
             
+            
+     #down keys end here
+            
+     
+     #up keys begin here
+        
+        
         if keys == 'Ud':
             moving[1] = False
 
@@ -416,27 +441,42 @@ def play():
 
         if keys == 'Uq':
             turning[0] = False
+            
+            
+     #up keys end here
 
 
         if(moving[1] == True):
+            
+            #if player x position smaller than max, move right
             if(player_1.x < area[0]):
                 player_1.move(0)
 
         if(moving[0] == True):
+            
+            #if player x position larger than minimum, move left
             if(player_1.x > 0):
                 player_1.move(1)
 
         if(turning[1] == True):
+            
+            #if player angle larger than minimum, rotate anti-clockwise
             if player_1.a > -45:
                 player_1.a -= 0.5
 
-
         if(turning[0] == True):
+            
+            #if player angle smaller than maximum, rotate clockwise
             if player_1.a < 45:
                 player_1.a += 0.5
                 
         #checks the keys for the second player movement
         if two_player and wait == False:
+            
+            
+          #down keys begin here
+            
+            
             if keys == 'Dright':
                 moving[3] = True
 
@@ -449,6 +489,7 @@ def play():
             if keys == 'DrCtrl':
                 turning[2] = True
 
+            #shooting command for second player
             if keys == 'Dup':
                 if(tick_2 - last_shot_2 > 2):
                     
@@ -459,6 +500,13 @@ def play():
                     last_shot_2 = count//40
 
                 shooting_2 = True
+                
+                
+          #down keys end here
+        
+        
+          #up keys begin here
+                
                 
             if keys == 'Uright':
                 moving[3] = False
@@ -471,6 +519,10 @@ def play():
 
             if keys == 'UrCtrl':
                 turning[2] = False
+                
+                
+          #up keys end here
+                
           
             if(moving[3] == True):
                 if(player_2.x < area[0]):
@@ -484,36 +536,30 @@ def play():
                 if player_2.a > -45:
                     player_2.a -= 0.5
 
-
             if(turning[3] == True):
                 if player_2.a < 45:
                     player_2.a += 0.5
                 
-                
-        
-        
+        # displays wave number in the middle of the screen for a little bit
         if tick_1 < 10:
             gui.render_lines("wave " + str(wave + 1),area[0]//2,area[1]//2,40)
-
-
 
         # get count
         if(count%40 == 0):
             tick_1 = count // 40
-            if two_player and wait == False:
+            
+            if two_player and wait == False: #if second player is active
                 tick_2 = count // 40
                 
         count += 1
 
         # draws the player
         gui.draw_object(gui.rotate_image(player_1.image, player_1.a), player_1.r)
-        if two_player and wait == False:
+        
+        if two_player and wait == False: # if second player is active
             gui.draw_object(gui.rotate_image(player_2.image, player_2.a), player_2.r)
         gui.update()
         
-        
-
-
 # Displays the highscores in the right formate
 def show_scores():
 
