@@ -12,31 +12,39 @@ a,b,x,y = area
 
 pygame.display.set_caption("Menu")
 
-BG = pygame.transform.scale(pygame.image.load("resources/images/bg.jpg"),(x,y))
+#initialising and declaring background image variables
+Background = pygame.transform.scale(pygame.image.load("resources/images/bg.jpg"),(x,y))
 game_bg = pygame.image.load("resources/images/bg.jpg")
 
-def update(): #Update the display
+#Update the display
+def update():
     pygame.display.update()
 
-def get_font(size): #sets the font
+#sets the font
+def get_font(size):
     return pygame.font.Font("resources/fonts/LCDN.TTF", size)
 
-def get_area(): # get display area
+# get display area
+def get_area(): 
 
     xy = [x,y]
 
     return xy
 
-def draw_object(a,r): # Draw an object with pygame
+# Draw an object with pygame
+def draw_object(a,r):
     screen.blit(a, r)
 
-def rotate_image(i,a): # Rotate an image with pygame
+# Rotate an image with pygame
+def rotate_image(i,a): 
     return pygame.transform.rotate(i, a)
 
-def get_image_rect(i,x,y): # Get the pygame image rect
+# Get the pygame image rect
+def get_image_rect(i,x,y): 
     return i.get_rect(center=(x,y))
 
-def load_image(i,b): # Load an image with pygame
+# Load an image with pygame
+def load_image(i,b): 
     if b == None:
         i = pygame.image.load(i)
     else:
@@ -44,13 +52,16 @@ def load_image(i,b): # Load an image with pygame
 
     return i
 
-def scale_image(i,x,y): # Scale an image with pygame
+# Scale an image with pygame
+def scale_image(i,x,y): 
     return pygame.transform.scale(i ,(x,y))
 
-def clear_screen(i): # clear the screen 
+# clear the screen and display image i
+def clear_screen(i): 
     screen.blit(i, (0,0))
 
-def render_lines(text,x,y,font_size): # Render multiple lines split with a \n
+# Render multiple lines split with a \n
+def render_lines(text,x,y,font_size): 
 
     text = text.splitlines()
     for i, l in enumerate(text):
@@ -58,7 +69,8 @@ def render_lines(text,x,y,font_size): # Render multiple lines split with a \n
         controls_rect = controls_text.get_rect(center=(x,(y+60*i)))
         screen.blit(controls_text, controls_rect)
 
-def get_keys(): # get the keys pressed by the user with pygame
+# get the keys pressed by the user with pygame
+def get_keys(): 
     
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -130,40 +142,50 @@ def get_keys(): # get the keys pressed by the user with pygame
             if event.key == pygame.K_RCTRL:
                 return 'UrCtrl'           
                             
+# show the play screen
+def play(a): 
 
-def play(a): # show the play screen
-
-    screen.blit(BG, (0,0))
+    screen.blit(Background, (0,0))
     show = False
 
     if a:
         show = True
 
+    #render controls if it's the first wave that's about to begin
     while show:
         render_lines("Controls: \nD - move right \nA - move left \nE - rotate clockwise\n Q - rotate counter-clockwise\n 2 - add second player\nX - quit \nPRESS ENTER TO START",x/2,2*(y/8),45)
 
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
+                
+                #end the display of the controls
                 if event.key == pygame.K_RETURN:
                     show = False
 
         pygame.display.update()
-    
-def highscore(scores): # Show the highscore screen
 
+# Show the highscore screen
+def highscore(scores): 
+
+    #play the background music for the high score screen
     highscore_screen_music = pygame.mixer.Sound('resources/sounds/spirit-of-adventure-powerful-opening-146810.mp3')
     pygame.mixer.Sound.play(highscore_screen_music)
     
     while True:
+        
+        #track the position of the mouse
         mouse_pos = pygame.mouse.get_pos()
 
-        screen.blit(BG, (0,0))
+        #render everything on the highscore screen
+        screen.blit(Background, (0,0))
         render_lines("Highscore:" ,x/2,y/8,45) 
         render_lines(scores, x/2, y/8 + 20,30)
 
+        #use the button class to create a button at the specific position
         Back_button = Button(image=None, pos=(x/2, 7*(y/8)), 
                             text_input="BACK", font=get_font(75), base_color="Black", hovering_color="Green")
 
+        #tracks the mouse position for when it's hovering over the button
         Back_button.changeColor(mouse_pos)
         Back_button.update(screen)
 
@@ -181,7 +203,7 @@ def highscore(scores): # Show the highscore screen
 
 def main_menu(): # show the main menu screen
     while True:
-        screen.blit(BG, (0, 0))
+        screen.blit(Background, (0, 0))
 
         mouse_pos = pygame.mouse.get_pos()
 
@@ -223,7 +245,7 @@ def game_state(string_x,r,score): # display either a win or game over screen and
     diff = 0
 
     while True:
-        screen.blit(BG, (0,0))
+        screen.blit(Background, (0,0))
         mouse_pos = pygame.mouse.get_pos()
         render_lines(string_x,x/2,2*(y/8),40) 
         render_lines("1. Press S to save score:\n2. Type in your name\n3. Press enter",x/2,5*(y/8),35)
@@ -267,7 +289,7 @@ def get_name(string_x): # Get the users name to save with the highscore
     checking = True
 
     while checking:
-        screen.blit(BG, (0,0))
+        screen.blit(Background, (0,0))
         render_lines(string_x,x/2,2*(y/8),40) 
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
