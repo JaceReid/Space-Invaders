@@ -7,13 +7,15 @@ import pygame
 wave = 0
 score = 0
 
-
+#defining the main function - called as soon as the programme is initiated
 def main():
 
     global score
     
+    #initiating and declaring the song to be played when the main menu function is called and the main menu is displayed
     main_menu_song = pygame.mixer.Sound('resources/sounds/future-invention-upbeat-high-electronic-technological-music-57037.mp3')
     
+    #playing the main menu background song
     pygame.mixer.Sound.play(main_menu_song)
 
     # Get the users option from the main menu
@@ -21,19 +23,24 @@ def main():
     option = gui.main_menu()
     score = 0
 
-
-    # Change window depending on the button pressed.
+    #Change window depending on the button pressed.
     if option == 'play':
+        
+        #stops playing main menu song if main menu is exited
         pygame.mixer.Sound.stop(main_menu_song)
+        
+        #calling the function that displays and loops through gameplay
         play()
         start_time = datetime.datetime.now()
-        
+    
+    #Change window depending on the button pressed
     elif option == 'options':
+        
+        #stops playing the main menu song if main menu is exited
         pygame.mixer.Sound.stop(main_menu_song)
         show_scores()
 
-    
-
+#gameplay function
 def play():
 
     # set global varible
@@ -47,41 +54,53 @@ def play():
     else:
         gui.play(0)
 
-    
     area = gui.get_area()
 
-    # Declare and intilze varibles
+    
+ # Declaring and initialising varibles begins here
+    
+    #object and background visuals
     Background = gui.load_image("resources/images/game.jpg",None)
     Background = gui.scale_image(Background,area[0],area[1])
     game_bg = gui.load_image("resources/images/bg.jpg", None)
     image_player = gui.load_image('resources/images/player.bmp',Background)
     image_rocket = gui.load_image('resources/images/rocket.bmp',Background)
+    
+    #multiple-object arrays
     enemys = []
     bunkers = []
-    startx = 50
+    
+    #position variables
+    startx = 100
     starty = 50
+    
+    #motion boolean lists
     moving = [False,False,False,False]
     turning = [False,False,False,False]
 
+    #object visuals
     image_enemy = gui.scale_image(gui.load_image('resources/images/enemy.png',Background),32,32)
     image_enemy_rocket = gui.scale_image(gui.load_image('resources/images/enemy-rocket.bmp',Background),5,15)
-
     image_bunker = gui.load_image('resources/images/bunker.png',Background)
     image_bunker = gui.load_image('resources/images/bunker.png', Background)
     image_bunker1 = gui.load_image('resources/images/bunker1.png', Background)
     image_bunker2 = gui.load_image('resources/images/bunker2.png', Background)
     image_bunker3 = gui.load_image('resources/images/bunker3.png', Background)
-    
     heart = gui.scale_image(gui.load_image('resources/images/heart.png',Background),28,28)
-     
+    
+    #declaring and initialising sounds
     shoot_sound = pygame.mixer.Sound('resources/sounds/rocket.mp3')
     enemy_dead = pygame.mixer.Sound('resources/sounds/enemy-dead.mp3')
 
     enemy_rows,enemy_columns = 4,(10+2*wave)
     player_1_lives = 3
     player_2_lives = 3
+    
+    #shooting booleans
     shooting_1 = False
     shooting_2 = False
+    
+    #rocket lists
     rockets_1 = []
     rockets_2 = []
     enemy_rockets = []
@@ -92,10 +111,15 @@ def play():
     two_player = False
     
     last_shot_1, last_shot_2 = 0,0 
-    startx,starty = 100,50
+    
+    #positions for objects
     enemy_x,enemy_y = 0,0
     bunkers_pos = []
     bunker_x,bunker_y = 0,(area[1]-100)
+    
+    
+ # Declaring and initialising variables ends here
+    
 
     # Creates the first player
     player_1 = class_Manager.make_player(image_player, area[0]//2,area[1]-20)
@@ -111,7 +135,7 @@ def play():
             
             enemys.append(class_Manager.make_enemy(image_enemy,enemy_x,enemy_y,2+1*wave))
 
-
+    #
     gui.clear_screen(game_bg)
 
     # Game loop
