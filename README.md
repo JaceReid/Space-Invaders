@@ -75,8 +75,8 @@ Group number: 10
      - New graphics, for the bunker and enemy rocket, were designed in paint.net
      - New graphics, for the player lives, enemies, player and player rocket, were sourced off of the web
   10. Additional player
-    - A second player object was created by using the player class used for the first player
-    - The second player can be called and initiated by pressing down "2" during gameplay
+     - A second player object was created by using the player class used for the first player
+     - The second player can be called and initiated by pressing down "2" during gameplay
      - Only if the second player is active, is the second player and its rockets considered in all loops and checks
      - The second player's health is also rendered on the bottom left hand side of the screen
      - New keys, such as arrows for left and right and "Alt" and "Ctrl" for rotation, for used for movement for the second player
