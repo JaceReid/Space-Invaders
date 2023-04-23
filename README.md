@@ -45,12 +45,42 @@ Group number: 10
      - The called information is used to initialise score variables as strings
      - These strings are then rendered on the high scores screen, with a new background and background music (called as mentioned above in 2)
   4. Saving high score to json file
-     - 
-  7. Progressively harder levels
-  8. Extra lives
-  9. Enemies counterattack
-  10. Bunkers
-  11. Improved graphics
+     - When the gameplay loop is interrupted by a player losing all their lives or gameplay reaching the end of the final wave, this option is given to the user
+     - This option is given when the game_state function is called
+     - When the user chooses the option to save their score, the get_name function is called which allows user input to type in their name
+     - The save_score function is then called from main.py, which opens the jason file for the high scores and updates the information by using json.dump
+     - the json file is updated by adding the player name and saved score to the file information
+  5. Progressively harder levels
+     - The number of columns of enemies increase with each wave and are calculated by using the wave number
+  6. Extra lives
+     - The player has 3 lives, which are displayed at the bottom left corner of the screen
+     - A life gets removed each time a collision occurs between an enemy rocket and the player
+     - Once the number of lives of the player reaches 0, gameplay ends and the "Game Over" screen is displayed
+  7. Enemies counterattack
+     - Every time the game tick (count) modulus 10 is equal to 0, there is a random probability that an enemy rocket is created using the rocket class
+     - Once the class is used to create the enemy rocket, it is appended to the array of enemy rockets
+     - The array of enemy rockets is looped through to check for collisions between an enemy rocket and the player
+     - If a collision occurs, the enemy rocket is deleted and a life is removed from the player
+  8. Bunkers
+     - every time the game tick (counter) modulus 100 is equal to 0, there is a random probability that a bunker will be generated at one of the possible positions
+     - If the probability succeeds, the bunker class is used to create a bunker object, which is appended to the bunker array
+     - The array of bunkers is looped through to check for a bunker lready generated at the chosen position
+     - If there is a bunker at that position, the bunker will no longer be generated
+     - if the position is empty, a bunker is generated at that position
+     - The bunker array is constantly looped through to check for collisions with enemy rockets or player rockets
+     - If there is a collision in any of these cases, there is a random chance of doing damage to the bunker
+     - For each level of damage, a new image is rendered for that specific array, until the bunker reaches full damage (zero health) and is deleted
+  9. Improved graphics
+     - New backgrounds, for the main menu and gameplay, were sourced off of the web
+     - New graphics, for the bunker and enemy rocket, were designed in paint.net
+     - New graphics, for the player lives, enemies, player and player rocket, were sourced off of the web
+  10. Additional player
+     - A second player object was created by using the player class used for the first player
+     - The second player can be called and initiated by pressing down "2" during gameplay
+     - Only if the second player is active, is the second player and its rockets considered in all loops and checks
+     - The second player's health is also rendered on the bottom left hand side of the screen
+     - New keys, such as arrows for left and right and "Alt" and "Ctrl" for rotation, for used for movement for the second player
+     - The "Up" arrow is used to command the second player to shoot a player rocket
 
 ## Used code:
 The button class is used from this tutorial: https://www.youtube.com/redirect?event=video_description&redir_token=QUFFLUhqbWpVRkEyQmhaV2hnTlJFcGh1NnU4OUVnMXB2Z3xBQ3Jtc0tsdGtmajQzaTRUM1JwWG1vcG1fRUtPQUNBaHh4YzI1NFhMRUVabkRFMlhYR3hYUzNuYlN2OTFFR0pNZDhsczZyNkRKeHBJakh4ajlhblFhc29DQ1BPMWlHaDR1TGJvajhKdHdJbUg3S3d1anhjTEhoWQ&q=https%3A%2F%2Fgithub.com%2Fbaraltech%2FMenu-System-PyGame&v=GMBqjxcKogA
