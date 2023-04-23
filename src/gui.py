@@ -229,7 +229,7 @@ def game_state(string_x,r,score): # display either a win or game over screen and
         render_lines("1. Press S to save score:\n2. Type in your name\n3. Press enter",x/2,5*(y/8),35)
 
         OPTIONS_BACK = Button(image=None, pos=(x/2, 4*(y/8)), 
-                            text_input="BACK", font=get_font(75), base_color="Black", hovering_color="Green")
+                            text_input="BACK TO MENU", font=get_font(75), base_color="Black", hovering_color="Green")
 
         OPTIONS_BACK.changeColor(mouse_pos)
         OPTIONS_BACK.update(screen)
