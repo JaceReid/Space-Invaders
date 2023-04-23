@@ -95,7 +95,13 @@ def get_keys(): # get the keys pressed by the user with pygame
 
             if event.key == pygame.K_2:
                 return '2'           
+
+            if event.key == pygame.K_RALT:
+                return 'DrAlt'           
                                         
+            if event.key == pygame.K_RCTRL:
+                return 'DrCtrl'           
+
 
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_d:
@@ -117,6 +123,12 @@ def get_keys(): # get the keys pressed by the user with pygame
                 
             if event.key == pygame.K_UP:
                 return 'Uup'
+
+            if event.key == pygame.K_RALT:
+                return 'UrAlt'           
+                                        
+            if event.key == pygame.K_RCTRL:
+                return 'UrCtrl'           
                             
 
 def play(a): # show the play screen
@@ -149,18 +161,18 @@ def highscore(scores): # Show the highscore screen
         render_lines("Highscore:" ,x/2,y/8,45) 
         render_lines(scores, x/2, y/8 + 20,30)
 
-        OPTIONS_BACK = Button(image=None, pos=(x/2, 7*(y/8)), 
+        Back_button = Button(image=None, pos=(x/2, 7*(y/8)), 
                             text_input="BACK", font=get_font(75), base_color="Black", hovering_color="Green")
 
-        OPTIONS_BACK.changeColor(mouse_pos)
-        OPTIONS_BACK.update(screen)
+        Back_button.changeColor(mouse_pos)
+        Back_button.update(screen)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
-                if OPTIONS_BACK.checkForInput(mouse_pos):
+                if Back_button.checkForInput(mouse_pos):
                 
                     pygame.mixer.Sound.stop(highscore_screen_music)
                     main.main()
@@ -176,16 +188,16 @@ def main_menu(): # show the main menu screen
         menu_text = get_font(100).render("Space Invaders", True, "#b68f40")
         menu_rect = menu_text.get_rect(center=(x/2, 2*(y/8)))
 
-        PLAY_BUTTON = Button(image=None, pos=(x/2, 4*(y/8)), 
+        Play_button = Button(image=None, pos=(x/2, 4*(y/8)), 
                             text_input="PLAY", font=get_font(75), base_color="#d7fcd4", hovering_color="Green")
-        OPTIONS_BUTTON = Button(image=None, pos=(x/2, 5*(y/8)), 
+        Highscore_button = Button(image=None, pos=(x/2, 5*(y/8)), 
                             text_input="HIGHSCORES", font=get_font(75), base_color="#d7fcd4", hovering_color="Green")
-        QUIT_BUTTON = Button(image=None, pos=(x/2, 6*(y/8)), 
+        Quit_button = Button(image=None, pos=(x/2, 6*(y/8)), 
                             text_input="QUIT", font=get_font(75), base_color="#d7fcd4", hovering_color="Green")
 
         screen.blit(menu_text, menu_rect)
 
-        for button in [PLAY_BUTTON, OPTIONS_BUTTON, QUIT_BUTTON]:
+        for button in [Play_button, Highscore_button, Quit_button]:
             button.changeColor(mouse_pos)
             button.update(screen)
         
@@ -194,17 +206,17 @@ def main_menu(): # show the main menu screen
                 pygame.quit()
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
-                if PLAY_BUTTON.checkForInput(mouse_pos):
+                if Play_button.checkForInput(mouse_pos):
                     return 'play'
-                if OPTIONS_BUTTON.checkForInput(mouse_pos):
+                if Highscore_button.checkForInput(mouse_pos):
                     return 'options'
-                if QUIT_BUTTON.checkForInput(mouse_pos):
+                if Quit_button.checkForInput(mouse_pos):
                     pygame.quit()
                     sys.exit()
 
         pygame.display.update()
 
-def game_state(string_x,r): # display either a win or game over screen
+def game_state(string_x,r,score): # display either a win or game over screen and optionally saves the players score
 
     timer = datetime.datetime.now()
     data = [0,""]
@@ -234,18 +246,18 @@ def game_state(string_x,r): # display either a win or game over screen
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if OPTIONS_BACK.checkForInput(mouse_pos):
-                    
+                    main.save_score(data[1],score)                    
                     main.main()
-                    return data
 
         if r:
             current_count = (timer - datetime.datetime.now()) / datetime.timedelta(seconds=1)
             count = 5 - abs(int(current_count)) + diff
             
-            render_lines(str(count),640,300,30)
+            render_lines(str(count),x/2,300,30)
 
             if(count == 0):
                 data[0] = 1
+                main.save_score(data[1],score)
                 return data
         pygame.display.update()
 

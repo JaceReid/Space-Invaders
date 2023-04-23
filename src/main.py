@@ -1,6 +1,6 @@
 # Importing modules
 import gui, class_Manager, physics
-import time, random, math, json, datetime
+import random, math, json, datetime
 import pygame
 
 # Declaring global varibles
@@ -9,6 +9,8 @@ score = 0
 
 
 def main():
+
+    global score
     
     main_menu_song = pygame.mixer.Sound('resources/sounds/future-invention-upbeat-high-electronic-technological-music-57037.mp3')
     
@@ -17,6 +19,7 @@ def main():
     # Get the users option from the main menu
     option = ""
     option = gui.main_menu()
+    score = 0
 
 
     # Change window depending on the button pressed.
@@ -58,7 +61,7 @@ def play():
     startx = 50
     starty = 50
     moving = [False,False,False,False]
-    turning = [False,False]
+    turning = [False,False,False,False]
 
     image_enemy = gui.scale_image(gui.load_image('resources/images/enemy.png',Background),32,32)
     image_enemy_rocket = gui.scale_image(gui.load_image('resources/images/enemy-rocket.bmp',Background),5,15)
@@ -121,11 +124,8 @@ def play():
         if (len(enemys) == 0):
 
             if wave == 5:
-                op2 = gui.game_state('YOU WIN!!  score: ' + str(int(score)),0)
+                op2 = gui.game_state('YOU WIN!!  score: ' + str(int(score)),0,score)
 
-                if op2[2]:
-                    name = op2[1]
-                    save_score(name, score)
             else:
                 wave += 1
                 play()
@@ -190,9 +190,7 @@ def play():
         # Check the first players number of lives if they are hit
         if hit_1 and (tick_1-last_hit) > 3:
             if player_1_lives == 1:
-                op1 = gui.game_state("GAME OVER\nSCORE: " + str(score),1)
-                name = op1[1]
-                save_score(name, score)
+                op1 = gui.game_state("GAME OVER\nSCORE: " + str(score),1,score)
                 wave = 0 
                 if op1[0] == 1:
                     play()
@@ -203,9 +201,7 @@ def play():
             # Check the second players number of lives if they are hit
             if  hit_2 and (tick_2 - last_hit) > 3:
                 if player_2_lives == 1:
-                    op1 = gui.game_state("GAME OVER\nSCORE: " + str(score),1)
-                    name = op1[1]
-                    save_score(name, score)
+                    op1 = gui.game_state("GAME OVER\nSCORE: " + str(score),1,score)
                     wave = 0 
                     if op1[0] == 1:
                         play()
@@ -262,9 +258,7 @@ def play():
                 
 
                 if(enemys[i].y >= area[1]):
-                    op = gui.game_state('GAME OVER\nSCORE: ' + str(score),1)
-                    name = op[1]
-                    save_score(name, score)
+                    op = gui.game_state('GAME OVER\nSCORE: ' + str(score),1,score)
                     wave = 0
                     if op[0] == 1:
                         play()
@@ -410,6 +404,11 @@ def play():
             if keys == 'Dleft':
                 moving[2] = True
 
+            if keys == 'DrAlt':
+                turning[3] = True
+
+            if keys == 'DrCtrl':
+                turning[2] = True
 
             if keys == 'Dup':
                 if(tick_2 - last_shot_2 > 2):
@@ -427,21 +426,34 @@ def play():
 
             if keys == 'Uleft':
                 moving[2] = False
-          
-            if two_player and wait == False:
-                if(moving[3] == True):
-                    if(player_2.x < area[0]):
-                        player_2.move(0)
 
-                if(moving[2] == True):
-                    if(player_2.x > 0):
-                        player_2.move(1)
+            if keys == 'UrAlt':
+                turning[3] = False
+
+            if keys == 'UrCtrl':
+                turning[2] = False
+          
+            if(moving[3] == True):
+                if(player_2.x < area[0]):
+                    player_2.move(0)
+
+            if(moving[2] == True):
+                if(player_2.x > 0):
+                    player_2.move(1)
         
+            if(turning[2] == True):
+                if player_2.a > -45:
+                    player_2.a -= 0.5
+
+
+            if(turning[3] == True):
+                if player_2.a < 45:
+                    player_2.a += 0.5
                 
                 
         
         
-        if tick_1 < 10 or tick_2 < 10:
+        if tick_1 < 10:
             gui.render_lines("wave " + str(wave + 1),area[0]//2,area[1]//2,40)
 
 
