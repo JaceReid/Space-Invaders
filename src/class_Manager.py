@@ -11,8 +11,6 @@ def make_player(image,x,y):
 def make_rocket(image,x,y,a):
     return objects.rocket(image, x, y, a, image.get_rect(center=(x,y))) 
 
-
 def make_bunker(image,x,y):
     return objects.bunker(image,x,y,image.get_rect(center=(x,y)),4)
     
-
