@@ -71,15 +71,15 @@ Group number: 10
      - If there is a collision in any of these cases, there is a random chance of doing damage to the bunker
      - For each level of damage, a new image is rendered for that specific array, until the bunker reaches full damage (zero health) and is deleted
   9. Improved graphics
-     - New backgrounds, for the main menu and gameplay, were sourced off of the web
-     - New graphics, for the bunker and enemy rocket, were designed in paint.net
-     - New graphics, for the player lives, enemies, player and player rocket, were sourced off of the web
+     - New backgrounds, for gameplay and menu screens, have been sourced from the web
+     - New graphics, for the enemy, player, player missile and player health, were sourced from the web
+     - New graphics, for the bunker, different bunker health levels and enemy rocket, were designed in paint.net
   10. Additional player
      - A second player object was created by using the player class used for the first player
      - The second player can be called and initiated by pressing down "2" during gameplay
      - Only if the second player is active, is the second player and its rockets considered in all loops and checks
      - The second player's health is also rendered on the bottom left hand side of the screen
-     - New keys, such as arrows for left and right and "Alt" and "Ctrl" for rotation, for used for movement for the second player
+     - New keys, such as arrows for left and right and "Alt" and "Ctrl" for rotation, used for movement for the second player
      - The "Up" arrow is used to command the second player to shoot a player rocket
      
 ## Used code:
