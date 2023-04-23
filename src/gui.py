@@ -226,9 +226,9 @@ def game_state(string_x,r,score): # display either a win or game over screen and
         screen.blit(BG, (0,0))
         mouse_pos = pygame.mouse.get_pos()
         render_lines(string_x,x/2,2*(y/8),40) 
-        render_lines("Press S to save score!",x/2,6*(y/8),35)
+        render_lines("1. Press S to save score:\n2. Type in your name\n3. Press enter",x/2,5*(y/8),35)
 
-        OPTIONS_BACK = Button(image=None, pos=(x/2, 5*(y/8)), 
+        OPTIONS_BACK = Button(image=None, pos=(x/2, 4*(y/8)), 
                             text_input="BACK", font=get_font(75), base_color="Black", hovering_color="Green")
 
         OPTIONS_BACK.changeColor(mouse_pos)
@@ -253,7 +253,7 @@ def game_state(string_x,r,score): # display either a win or game over screen and
             current_count = (timer - datetime.datetime.now()) / datetime.timedelta(seconds=1)
             count = 5 - abs(int(current_count)) + diff
             
-            render_lines(str(count),x/2,300,30)
+            render_lines(str(count),x/2,3.5*(y/8),30)
 
             if(count == 0):
                 data[0] = 1
