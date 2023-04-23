@@ -1,7 +1,10 @@
 import math, pygame, random
+#this file is used to define the different classes used for all the objects
 
 # Player class
 class player:
+    
+    #attributes of the class
     def __init__(self, image, x, y, a, r):
         self.image = image
         self.x = x
@@ -22,7 +25,10 @@ class player:
 
         self.r = self.image.get_rect(center=(self.x,self.y))
 
+#Rocket class
 class rocket:
+    
+    #attributes of the class
     def __init__(self, image, x, y, a, r):
         self.image = image
         self.x = x
@@ -43,7 +49,10 @@ class rocket:
             self.y += 14*math.sin(a1)
     
 
+#Enemy class
 class enemy:
+    
+    #attributes of the class
     def __init__(self, image, x, y, speed,r):
         self.image = image
         self.x = x
@@ -57,7 +66,10 @@ class enemy:
     def __str__(self):
         return str(self.x) + " " + str(self.y) + ";  " + str(self.r)
 
+#Bunker class
 class bunker:
+    
+    #attributes of the class
     def __init__(self, image, x,y,r,s):
         self.image = image
         self.x = x
@@ -69,6 +81,7 @@ class bunker:
         if random.randint(0,3 > 1):
             self.s -= 1
 
+#move function used for each class' movement
 def move(self, direction, amount):
     if direction == 0:
         self.x += amount
@@ -78,4 +91,5 @@ def move(self, direction, amount):
     else:
         pass
 
+    #creating a new rectangle after movement has been induced and a new position has been defined
     self.r = self.image.get_rect(center=(self.x,self.y))
