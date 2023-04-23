@@ -190,9 +190,11 @@ def highscore(scores):
         Back_button.update(screen)
 
         for event in pygame.event.get():
+            
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
+                
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if Back_button.checkForInput(mouse_pos):
                 
@@ -201,15 +203,19 @@ def highscore(scores):
 
         pygame.display.update()
 
-def main_menu(): # show the main menu screen
+# show the main menu screen
+def main_menu(): 
     while True:
         screen.blit(Background, (0, 0))
 
+        #check for the mouse's position
         mouse_pos = pygame.mouse.get_pos()
 
+        #render the text for the main menu at the specified positions
         menu_text = get_font(100).render("Space Invaders", True, "#b68f40")
         menu_rect = menu_text.get_rect(center=(x/2, 2*(y/8)))
 
+        #using the button class to create multiple button objects
         Play_button = Button(image=None, pos=(x/2, 4*(y/8)), 
                             text_input="PLAY", font=get_font(75), base_color="#d7fcd4", hovering_color="Green")
         Highscore_button = Button(image=None, pos=(x/2, 5*(y/8)), 
@@ -217,12 +223,15 @@ def main_menu(): # show the main menu screen
         Quit_button = Button(image=None, pos=(x/2, 6*(y/8)), 
                             text_input="QUIT", font=get_font(75), base_color="#d7fcd4", hovering_color="Green")
 
+        #update the display with the rendered items
         screen.blit(menu_text, menu_rect)
 
+        #checking for a change to hover colour due to the mouse hovering over the button objects' rectangles
         for button in [Play_button, Highscore_button, Quit_button]:
             button.changeColor(mouse_pos)
             button.update(screen)
         
+        #checking for inputs from keys or the mouse to change the state of the programme
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -238,7 +247,8 @@ def main_menu(): # show the main menu screen
 
         pygame.display.update()
 
-def game_state(string_x,r,score): # display either a win or game over screen and optionally saves the players score
+# display either a win or game over screen and optionally saves the players score
+def game_state(string_x,r,score): 
 
     timer = datetime.datetime.now()
     data = [0,""]
@@ -247,9 +257,12 @@ def game_state(string_x,r,score): # display either a win or game over screen and
     while True:
         screen.blit(Background, (0,0))
         mouse_pos = pygame.mouse.get_pos()
+        
+        #showing text on the screen at these specific positions
         render_lines(string_x,x/2,2*(y/8),40) 
         render_lines("1. Press S to save score:\n2. Type in your name\n3. Press enter",x/2,5*(y/8),35)
-
+        
+        #creating a back button object from the button class
         OPTIONS_BACK = Button(image=None, pos=(x/2, 4*(y/8)), 
                             text_input="BACK TO MENU", font=get_font(75), base_color="Black", hovering_color="Green")
 
@@ -271,6 +284,7 @@ def game_state(string_x,r,score): # display either a win or game over screen and
                     main.save_score(data[1],score)                    
                     main.main()
 
+        #countdown being rendered to the screen; if countdown reaches 0, gameplay restarts automatically
         if r:
             current_count = (timer - datetime.datetime.now()) / datetime.timedelta(seconds=1)
             count = 5 - abs(int(current_count)) + diff
@@ -283,7 +297,8 @@ def game_state(string_x,r,score): # display either a win or game over screen and
                 return data
         pygame.display.update()
 
-def get_name(string_x): # Get the users name to save with the highscore
+# Get the users name to save with the highscore
+def get_name(string_x): 
 
     name = ""
     checking = True
@@ -352,6 +367,7 @@ def get_name(string_x): # Get the users name to save with the highscore
                 if event.key == pygame.K_RETURN:
                     checking = False
     
+                #rendering the text on the screen as the user types it in
                 render_lines(name,x/2,2*(y/5),40) 
                 pygame.display.update()
     return name
