@@ -3,13 +3,13 @@
 =======
 Group number: 10
 
-Group members:
+## Group members:
 
   1. Rudolf Louw
   2. Armand Orffer
   3. James Devine
 
-Project ZIP file includes:
+## Project ZIP file includes:
 
   1. main.py
   2. gui.py
@@ -27,7 +27,7 @@ Project ZIP file includes:
   10. README.md
   11. Peer review form
 
-Advanced functionality:
+## Advanced functionality:
   
   1. Sounds
   2. Music
@@ -39,9 +39,9 @@ Advanced functionality:
   8. Bunkers
   9. Improved graphics
 
-# Used code:
+## Used code:
 The button class is used from this tutorial: https://www.youtube.com/redirect?event=video_description&redir_token=QUFFLUhqbWpVRkEyQmhaV2hnTlJFcGh1NnU4OUVnMXB2Z3xBQ3Jtc0tsdGtmajQzaTRUM1JwWG1vcG1fRUtPQUNBaHh4YzI1NFhMRUVabkRFMlhYR3hYUzNuYlN2OTFFR0pNZDhsczZyNkRKeHBJakh4ajlhblFhc29DQ1BPMWlHaDR1TGJvajhKdHdJbUg3S3d1anhjTEhoWQ&q=https%3A%2F%2Fgithub.com%2Fbaraltech%2FMenu-System-PyGame&v=GMBqjxcKogA
-Libraries used:
+### Libraries used:
   1. pygame (Used only as a user interface)
   2. Datetime
   3. random
