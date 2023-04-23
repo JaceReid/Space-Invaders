@@ -135,18 +135,19 @@ def play():
             
             enemys.append(class_Manager.make_enemy(image_enemy,enemy_x,enemy_y,2+1*wave))
 
-    #
     gui.clear_screen(game_bg)
 
     # Game loop
     while True:
 
+        # display image variable as the background for the gameplay
         gui.clear_screen(Background)
         wait = False
 
-        # If all enemys are dead
+        # If all enemies are dead
         if (len(enemys) == 0):
 
+            #if gameplay has reached the last wave
             if wave == 5:
                 op2 = gui.game_state('YOU WIN!!  score: ' + str(int(score)),0,score)
 
@@ -154,8 +155,8 @@ def play():
                 wave += 1
                 play()
 
-        # count is used as a game tick
-        # genrate a bunker in one of the 4 postions with a random probabilty
+        # count is used as a game tick (see end of function)
+        # generate a bunker in one of the 4 postions with a random probabilty
         if count % 100 == 0:
 
             if (random.randint(0,2) > 1):
@@ -165,15 +166,18 @@ def play():
 
                 for i in range(len(bunkers_pos)):
                     
+                    #if there is already a bunker in that position, boolean set False
                     if bunkers_pos[i][0] == bunker_x:
                         add_bunker = False
+                        
                 if add_bunker:
                     bunkers.append(class_Manager.make_bunker(image_bunker,bunker_x,bunker_y))
                     bunkers_pos.append([bunker_x,bunker_y])
 
-            
+        #looping through the bunker list to continuously check for certain cases
         for i in range(len(bunkers)):
 
+            # Checking the damage on the bunkers and rendering the appropriate bunker image
             if(bunkers[i].s == 3):
                 bunkers[i].image = image_bunker1
             elif(bunkers[i].s == 2):
@@ -186,12 +190,15 @@ def play():
 
             gui.draw_object(bunkers[i].image, bunkers[i].r)
 
-        # Check if player or enemy rockets hit the bunkers and then have a rondom chance of doing damage
+            # Check if player or enemy rockets hit the bunkers and then have a rondom chance of doing damage
             for j in range(len(rockets_1)):
+                
                 if physics.colision(rockets_1[j],bunkers[i],30):
                     del rockets_1[j]
                     bunkers[i].damage()
+                    
             for j in range(len(rockets_2)):
+                
                 if physics.colision(rockets_2[j],bunkers[i],30):
                     del rockets_2[j]
                     bunkers[i].damage()
@@ -203,10 +210,14 @@ def play():
                     bunkers[i].damage()
                     break
 
+                # Collision between enemy rockets and the first player
                 if physics.colision(enemy_rockets[j],player_1,20):
                     hit_1 = True
                     break
-                if two_player:
+                
+                if two_player: #if the second player is active
+                    
+                   # Collision between enemy rockets and the second player
                    if physics.colision(enemy_rockets[j],player_2,20):
                         hit_2 = True
                         break
@@ -221,7 +232,9 @@ def play():
             player_1_lives -= 1            
             hit_1 = False
             last_hit = count//40
-        if two_player:
+            
+        if two_player: #if the second player is active
+            
             # Check the second players number of lives if they are hit
             if  hit_2 and (tick_2 - last_hit) > 3:
                 if player_2_lives == 1:
@@ -234,15 +247,17 @@ def play():
                 hit_2 = False
                 last_hit = count//40
             
-
-
-
-        # looping through all the enemys to check when to change direction
+        # looping through all the enemies to check when to change direction and when to drop an enemy rocket
         for i in range(len(enemys)):
+            
             try:
+                
+                #count used as a game tick (see later in function)
                 if (count % 10) == 0:
 
                     if(i > (len(enemys)-len(enemys)/4)):
+                        
+                        #random chance of dropping an enemy rocket by appending it to the enemy rockets list
                         if random.randint(0,100) > 99:
                             enemy_rockets.append(class_Manager.make_rocket(image_enemy_rocket, enemys[i].x, enemys[i].y, math.pi))
 
@@ -487,6 +502,7 @@ def play():
             tick_1 = count // 40
             if two_player and wait == False:
                 tick_2 = count // 40
+                
         count += 1
 
         # draws the player
