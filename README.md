@@ -75,12 +75,13 @@ Group number: 10
      - New graphics, for the bunker and enemy rocket, were designed in paint.net
      - New graphics, for the player lives, enemies, player and player rocket, were sourced off of the web
   10. Additional player
-     - A second player object was created by using the player class used for the first player
-     - The second player can be called and initiated by pressing down "2" during gameplay
+    - A second player object was created by using the player class used for the first player
+    - The second player can be called and initiated by pressing down "2" during gameplay
      - Only if the second player is active, is the second player and its rockets considered in all loops and checks
      - The second player's health is also rendered on the bottom left hand side of the screen
      - New keys, such as arrows for left and right and "Alt" and "Ctrl" for rotation, for used for movement for the second player
      - The "Up" arrow is used to command the second player to shoot a player rocket
+     
 
 ## Used code:
 The button class is used from this tutorial: https://www.youtube.com/redirect?event=video_description&redir_token=QUFFLUhqbWpVRkEyQmhaV2hnTlJFcGh1NnU4OUVnMXB2Z3xBQ3Jtc0tsdGtmajQzaTRUM1JwWG1vcG1fRUtPQUNBaHh4YzI1NFhMRUVabkRFMlhYR3hYUzNuYlN2OTFFR0pNZDhsczZyNkRKeHBJakh4ajlhblFhc29DQ1BPMWlHaDR1TGJvajhKdHdJbUg3S3d1anhjTEhoWQ&q=https%3A%2F%2Fgithub.com%2Fbaraltech%2FMenu-System-PyGame&v=GMBqjxcKogA
