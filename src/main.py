@@ -70,7 +70,7 @@ def play():
     image_bunker3 = gui.load_image('resources/images/bunker3.png', Background)
     
     heart = gui.scale_image(gui.load_image('resources/images/heart.png',Background),28,28)
-    
+     
     shoot_sound = pygame.mixer.Sound('resources/sounds/rocket.mp3')
     enemy_dead = pygame.mixer.Sound('resources/sounds/enemy-dead.mp3')
 
