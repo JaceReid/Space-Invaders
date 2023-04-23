@@ -12,9 +12,11 @@ class player:
         self.a = a
         self.r = r
 
+    #move function defined later in this file
     def move(self, direction):
         move(self, direction, 1)
 
+    #rotation of the player to be able to shoot in different directions
     def rotate(self, direction):
         if direction == 0:
             self.a += 1.5
@@ -36,6 +38,7 @@ class rocket:
         self.a = a
         self.r = r
 
+    #move function defined later in this file
     def move(self, e):
         if not e:
             a1 = (math.pi/2) - self.a*(math.pi/180) 
@@ -60,9 +63,11 @@ class enemy:
         self.speed = speed
         self.r = r
 
+    #move function defined later in this file
     def move(self, direction):
         move(self, direction, self.speed)
 
+    #
     def __str__(self):
         return str(self.x) + " " + str(self.y) + ";  " + str(self.r)
 
